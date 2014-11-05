@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="30">
+      <Unit0>
+        <Filename Value="project_gfflauncher.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="project_gfflauncher"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="59" Y="20"/>
+        <UsageCount Value="117"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="startup.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_startup"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="startup"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="50"/>
+        <CursorPos X="1" Y="84"/>
+        <UsageCount Value="117"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="gfflauncher.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gfflauncher"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="38"/>
+        <CursorPos X="70" Y="67"/>
+        <UsageCount Value="116"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_settings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="21"/>
+        <CursorPos X="1" Y="55"/>
+        <UsageCount Value="115"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="launcher.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_launcher"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="launcher"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="93"/>
+        <CursorPos X="8" Y="111"/>
+        <UsageCount Value="111"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="login.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_login"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="login"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="16"/>
+        <CursorPos X="10" Y="67"/>
+        <UsageCount Value="111"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="authsystem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="authsystem"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4"/>
+        <CursorPos X="1" Y="33"/>
+        <UsageCount Value="111"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="errorhandler.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_error"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="errorhandler"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="12"/>
+        <CursorPos X="29" Y="108"/>
+        <UsageCount Value="109"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="objcollection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="objcollection"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="21"/>
+        <UsageCount Value="104"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="startthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="StartThread"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="434"/>
+        <CursorPos X="1" Y="473"/>
+        <UsageCount Value="92"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="setupmc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_setupMC"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="setupMC"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="43"/>
+        <CursorPos X="17" Y="89"/>
+        <UsageCount Value="91"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="profiles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_Profiles"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Profiles"/>
+        <EditorIndex Value="14"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="19"/>
+        <UsageCount Value="87"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="jsonwork.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jsonWork"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="15"/>
+        <CursorPos X="1" Y="48"/>
+        <UsageCount Value="69"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="addprofile.pas"/>
+        <ComponentName Value="Form_addProfile"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="addProfile"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="9" Y="16"/>
+        <UsageCount Value="20"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\packages\fcl-json\src\jsonparser.pp"/>
+        <UnitName Value="jsonparser"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="3" Y="28"/>
+        <UsageCount Value="6"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\packages\fcl-json\src\fpjson.pp"/>
+        <UnitName Value="fpjson"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="330"/>
+        <CursorPos X="18" Y="331"/>
+        <UsageCount Value="6"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2159"/>
+        <CursorPos X="34" Y="2206"/>
+        <UsageCount Value="6"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="C:\lazarus\components\chmhelp\packages\help\lhelpcontrolpkg.pas"/>
+        <UnitName Value="lhelpcontrolpkg"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="54" Y="16"/>
+        <UsageCount Value="6"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="C:\lazarus\packager\registration\lazaruspackageintf.pas"/>
+        <UnitName Value="LazarusPackageIntf"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="22"/>
+        <CursorPos X="11" Y="46"/>
+        <UsageCount Value="6"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\lazarus\components\chmhelp\packages\help\lhelpcontrol.pas"/>
+        <UnitName Value="LHelpControl"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="51" Y="18"/>
+        <UsageCount Value="6"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="unit_json.pas"/>
+        <UnitName Value="Unit_json"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="6" Y="160"/>
+        <UsageCount Value="9"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\objpash.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="168"/>
+        <CursorPos X="23" Y="192"/>
+        <UsageCount Value="6"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\inc\objpas.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="235"/>
+        <CursorPos X="30" Y="261"/>
+        <UsageCount Value="9"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\classes\classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1537"/>
+        <CursorPos X="3" Y="1558"/>
+        <UsageCount Value="6"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="..\..\_Lazarus-APIs\synapse40\source\lib\httpsend.pas"/>
+        <UnitName Value="httpsend"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="52"/>
+        <CursorPos X="5" Y="852"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="jsonUtils.pas"/>
+        <UnitName Value="jsonUtils"/>
+        <EditorIndex Value="15"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="10" Y="43"/>
+        <UsageCount Value="34"/>
+        <Loaded Value="True"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="unit_appUtils.pas"/>
+        <UnitName Value="unit_appUtils"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="252"/>
+        <CursorPos X="9" Y="282"/>
+        <UsageCount Value="29"/>
+        <Loaded Value="True"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\objpash.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="177"/>
+        <CursorPos X="21" Y="201"/>
+        <UsageCount Value="9"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\objpas.inc"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="273"/>
+        <CursorPos X="12" Y="276"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
+        <UnitName Value="ComCtrls"/>
+        <EditorIndex Value="11"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1729"/>
+        <CursorPos X="17" Y="1771"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit29>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="204" Column="46" TopLine="181"/>
+      </Position1>
+      <Position2>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="211" Column="34" TopLine="183"/>
+      </Position2>
+      <Position3>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="206" Column="13" TopLine="184"/>
+      </Position3>
+      <Position4>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="205" Column="46" TopLine="170"/>
+      </Position4>
+      <Position5>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="275" Column="20" TopLine="263"/>
+      </Position5>
+      <Position6>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="404" Column="57" TopLine="339"/>
+      </Position6>
+      <Position7>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="375" Column="89" TopLine="346"/>
+      </Position7>
+      <Position8>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="373" Column="32" TopLine="349"/>
+      </Position8>
+      <Position9>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="376" Column="32" TopLine="341"/>
+      </Position9>
+      <Position10>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="368" Column="57" TopLine="348"/>
+      </Position10>
+      <Position11>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="409" Column="23" TopLine="386"/>
+      </Position11>
+      <Position12>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="372" Column="32" TopLine="355"/>
+      </Position12>
+      <Position13>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="396" Column="44" TopLine="371"/>
+      </Position13>
+      <Position14>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="394" Column="117" TopLine="371"/>
+      </Position14>
+      <Position15>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="368" Column="19" TopLine="353"/>
+      </Position15>
+      <Position16>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="277" Column="26" TopLine="260"/>
+      </Position16>
+      <Position17>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="470" Column="59" TopLine="434"/>
+      </Position17>
+      <Position18>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="135" Column="3" TopLine="111"/>
+      </Position18>
+      <Position19>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="461" Column="29" TopLine="434"/>
+      </Position19>
+      <Position20>
+        <Filename Value="launcher.pas"/>
+        <Caret Line="117" Column="5" TopLine="93"/>
+      </Position20>
+      <Position21>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="407" Column="64" TopLine="380"/>
+      </Position21>
+      <Position22>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="468" Column="12" TopLine="444"/>
+      </Position22>
+      <Position23>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="469" Column="12" TopLine="445"/>
+      </Position23>
+      <Position24>
+        <Filename Value="startup.pas"/>
+        <Caret Line="73" Column="30" TopLine="4"/>
+      </Position24>
+      <Position25>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="27" Column="38" TopLine="455"/>
+      </Position25>
+      <Position26>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="269" Column="9" TopLine="246"/>
+      </Position26>
+      <Position27>
+        <Filename Value="profiles.pas"/>
+        <Caret Line="19" Column="1" TopLine="1"/>
+      </Position27>
+      <Position28>
+        <Filename Value="profiles.pas"/>
+        <Caret Line="20" Column="1" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="224" Column="11" TopLine="201"/>
+      </Position29>
+      <Position30>
+        <Filename Value="startthread.pas"/>
+        <Caret Line="458" Column="1" TopLine="435"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>

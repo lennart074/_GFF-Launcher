@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="GFF-Launcher"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <BuildNr Value="181"/>
+      <StringTable Comments="Early-Access Version/Just to send something out" CompanyName="German Fast Forces" FileDescription="GFF-Launcher (Minecraft)" InternalName="GFF(/Galaxy?)-Launcher" LegalCopyright="To be edited" LegalTrademarks="To be edited" OriginalFilename="GFF-Launcher" ProductName="GFF-Launcher" ProductVersion="0.0.0.X"/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="4">
+      <Item1>
+        <PackageName Value="FCL"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="bgracontrols"/>
+      </Item2>
+      <Item3>
+        <PackageName Value="BGRABitmapPack"/>
+      </Item3>
+      <Item4>
+        <PackageName Value="LCL"/>
+      </Item4>
+    </RequiredPackages>
+    <Units Count="13">
+      <Unit0>
+        <Filename Value="project_gfflauncher.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="project_gfflauncher"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="startup.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_startup"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="startup"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="gfflauncher.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="gfflauncher"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_settings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="launcher.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_launcher"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="launcher"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="login.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_login"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="login"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="authsystem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="authsystem"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="errorhandler.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_error"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="errorhandler"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="objcollection.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="objcollection"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="startthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="StartThread"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="setupmc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_setupMC"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="setupMC"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="profiles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_Profiles"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Profiles"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="jsonwork.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jsonWork"/>
+      </Unit12>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="Output/GFF-Launcher"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\..\_Lazarus-APIs\synapse40\source\lib;I:\LazZeugsVonZuhause\_GFF-Launcher\Early-Access.\"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <MsgFileName Value=""/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

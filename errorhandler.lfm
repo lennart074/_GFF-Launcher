@@ -1,0 +1,80 @@
+object Form_error: TForm_error
+  Left = 2772
+  Height = 450
+  Top = -52
+  Width = 418
+  BorderIcons = []
+  BorderStyle = bsDialog
+  Caption = 'Form_error'
+  ClientHeight = 450
+  ClientWidth = 418
+  FormStyle = fsSystemStayOnTop
+  Position = poScreenCenter
+  ShowInTaskBar = stAlways
+  LCLVersion = '1.2.6.0'
+  object Memo_details: TMemo
+    Left = 0
+    Height = 264
+    Top = 184
+    Width = 418
+    Lines.Strings = (
+      'Memo_details'
+    )
+    TabOrder = 0
+  end
+  object Label_caption: TLabel
+    Left = 8
+    Height = 18
+    Hint = 'An error has occured whilest executing GFF-Launcher.exe!'
+    Top = 8
+    Width = 395
+    Caption = 'An error has occured whilst executing GFF-Launcher.exe!'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Arial Rounded MT Bold'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentColor = False
+    ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
+  end
+  object ToggleBox_details: TToggleBox
+    Left = 8
+    Height = 23
+    Top = 124
+    Width = 82
+    Caption = 'Details'
+    Color = clNone
+    OnChange = ToggleBox_detailsChange
+    TabOrder = 1
+  end
+  object Memo_short: TMemo
+    Left = 8
+    Height = 90
+    Top = 32
+    Width = 404
+    Lines.Strings = (
+      'Memo_short'
+    )
+    TabOrder = 2
+  end
+  object Label_detCaption: TLabel
+    Left = 2
+    Height = 13
+    Top = 168
+    Width = 204
+    Caption = 'The following details have been refered:'
+    ParentColor = False
+  end
+  object Button_kill: TButton
+    Left = 337
+    Height = 23
+    Top = 124
+    Width = 75
+    Caption = 'Kill'
+    OnClick = Button_killClick
+    TabOrder = 3
+  end
+end
