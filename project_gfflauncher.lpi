@@ -15,7 +15,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="181"/>
+      <BuildNr Value="185"/>
       <StringTable Comments="Early-Access Version/Just to send something out" CompanyName="German Fast Forces" FileDescription="GFF-Launcher (Minecraft)" InternalName="GFF(/Galaxy?)-Launcher" LegalCopyright="To be edited" LegalTrademarks="To be edited" OriginalFilename="GFF-Launcher" ProductName="GFF-Launcher" ProductVersion="0.0.0.X"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -43,7 +43,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="13">
+    <Units Count="15">
       <Unit0>
         <Filename Value="project_gfflauncher.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -130,6 +130,19 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jsonWork"/>
       </Unit12>
+      <Unit13>
+        <Filename Value="consoles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_consoles"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="consoles"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="log.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Log"/>
+      </Unit14>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

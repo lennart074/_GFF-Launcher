@@ -15,9 +15,9 @@ Type
   { Main Program Settings }
   TProgramSettings = Class(gfflauncher.TSettings)
   Public
-    javaPath: String;
+    javaPath, BaseArgs: String;
     Memory, BaseMem: Integer;
-    getUpdates, customMem: Boolean;
+    getUpdates, customMem, showConsole, showMCConsole: Boolean;
     Procedure WriteFile;
     Procedure ReadFile;
   End;
@@ -212,6 +212,8 @@ Begin
   INI.WriteBool('GFFLauncher', 'getUpdates', False);
   INI.WriteBool('Minecraft', 'customMem', False);
   INI.WriteInteger('Minecraft', 'Memory', 1024);
+  INI.WriteBool('GFFLauncher','showCons',False);
+  INI.WriteBool('Minecraft','showCons',False);
 End;
 
 Procedure TProgramSettings.ReadFile;
@@ -220,6 +222,10 @@ Begin
   getUpdates := INI.ReadBool('GFFLauncher', 'getUpdates', True);
   customMem := INI.ReadBool('Minecraft', 'customMem', False);
   Memory := INI.ReadInteger('Minecraft', 'Memory', 1024);
+  BaseArgs := INI.ReadString('Minecraft','BaseArgs','-Djava.library.path=%appdata%\GFFLauncher\Binaries\LWJGL\windows\natives -cp %Libs% net.minecraft.client.main.Main');
+  showConsole:=INI.ReadBool('GFFLauncher','showCons',False);
+  showMCConsole:= INI.ReadBool('Minecraft','showCons',False);
+
 End;
 
 End.

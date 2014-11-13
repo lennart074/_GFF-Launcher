@@ -21,6 +21,7 @@ function MemoryStreamToString(M: TMemoryStream): string;
 function FindStringInList(list: TStringList; str: String): Integer;
 function DirectoryIsEmpty(Directory: string): boolean;
 function countString(str,char:String):Integer;
+function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
 
 implementation
 
@@ -266,6 +267,18 @@ begin
     Res := 'true';
   Result := Res;
 end;
+
+//-----BEGIN-Source:https://stackoverflow.com/questions/6341449/tstringlist-indexof-wildcard-within-indexof-----
+function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
+begin
+  for Result := 0 to Strings.Count-1 do begin
+    if (Pos(SubStr, Strings[Result])>0) then begin
+      Exit;
+    end;
+  end;
+  Result := -1;
+end;
+//-----END-Source-----
 
 function getSystemType(Binary: Boolean=False): Integer;
 var

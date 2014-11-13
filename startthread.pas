@@ -10,10 +10,9 @@ Uses
   { Processes } process,
   { INIFiles } IniFiles,
   { JSON-Units } jsonUtils, fpjson, jsonparser,
-  { Utils } unit_appUtils,
-  FileUtil
-  //{ Feedback } Dialogs
-  { DONE 50 -oL4YG -cDebug : Remove Debug-Feedback ! };
+  { Utils } unit_appUtils, FileUtil,
+  { Log/Consoles }Log
+  ;
 
 Type
   TStartThread = Class(TThread)
@@ -24,7 +23,7 @@ Type
     Destructor Destroy; { Termination of the Thread }
 
     Procedure GetInformation_type_Vanilla();
-    procedure StartMC_type_Vanilla();
+    Procedure StartMC_type_Vanilla();
 
     Procedure ShowStatus;
     Procedure SetBar;
@@ -33,7 +32,7 @@ Type
   Public
     {Public Declarations}
     HasTerminated: Boolean;
-    ProfilePath: String;
+    ProfilePath, version, assetIndex: String;
     HasErrored: Boolean;
     ErrorMsg: String;
     profileSettingsFile, webSettingsFile: String;
@@ -43,6 +42,9 @@ Type
     CurrentAction: String;
     Error: Exception;
     step, mstep: Integer;
+    LibList: TStringList;
+    subIndexFile, JarPath: String;
+    mcProc : TProcess;
   Private
     {Pivate Declarations}
   End;
@@ -54,7 +56,11 @@ Type
 Implementation
 
 Uses { SetupMC } setupMC,
-  { Errors } errorhandler;
+  { Errors } errorhandler,
+  { Settings } settings,
+  { Console Access } consoles,
+  { userdata } login
+  ;
 
 Procedure TStartThread.ShowStatus;
 Begin
@@ -76,14 +82,27 @@ Begin
       HasTerminated := True;
       Exit;
     End;
+    LibList := TStringList.Create;
 
     GetInformation_type_Vanilla();
+
+
+
+        If (HasErrored) Then
+    Begin
+      FreeOnTerminate := False;
+      HasTerminated := True;
+      Exit;
+    End;
+
     StartMC_type_vanilla();
 
 
 
     If (HasErrored) Then
     Begin
+      FreeOnTerminate := False;
+      HasTerminated := True;
       Exit;
     End
     Else
@@ -132,14 +151,14 @@ End;
 //##############################################################################
 Procedure TStartThread.GetInformation_type_Vanilla();
 Var
-  SubIndexFile, SubIndexURL, AssetIndexFile, AssetIndexURL, version,
-  assetIndex, LibStr, currStr, tempURL: String;
+  SubIndexURL, AssetIndexFile, AssetIndexURL,
+  LibStr, currStr, tempURL: String;
   P: TJSONParser;
   D: TJSONData;
   items, names, content, tempList: TStringList;
-  LibPkg, LibName, LibVersion, LibNativeStr, JarPath, JarURL: String;
+  LibPkg, LibName, LibVersion, LibNativeStr, JarURL: String;
   ObjHash: String;
-  I, I2, LibStrLoc: Integer; //I2 = I(secondLevel)
+  I, I2, LibStrLoc, fIndex: Integer; //I2 = I(secondLevel)
   P2, P3: TJSONParser;
   D2, D3: TJSONData;
   assetPath, assetPathLegacy: String;
@@ -159,7 +178,6 @@ Begin
     HasErrored := True;
     ErrorMsg := 'ProfileIndex: Version could not be read! This shouldn' +
       #39 + 't be able to happen here O.o! ';
-    HasTerminated := True;
     Exit;
   End;
   //Check if firstStart
@@ -170,12 +188,20 @@ Begin
   ForceDirectories(ProfilePath + '/assets/indexes/');
   ForceDirectories(ProfilePath + '/libraries');
   ForceDirectories(ProfilePath + '/versions/' + version);
+  ForceDirectories(ProfilePath + '/resourcepacks');
+  if (profileSettings.ReadBool('Profile','Forge-Ready',False)) then begin
+     tempList:=TStringList.Create;
+     tempList.Add('');
+     tempList.SaveToFile(ProfilePath+'/launcher_profiles.json');
+     FreeAndNil(tempList);
+  end;
 
   //Download SubIndex
   SubIndexURL := webSettings.ReadString('DownloadLocation', 'SubIndex',
     'http://s3.amazonaws.com/Minecraft.Download/versions/%version%/%version%.json');
   SubIndexURL := (StringReplace(SubIndexURL, '%version%', version, [rfReplaceAll]));
-  SubIndexFile := (ProfilePath + '/versions/' + version + '/' + profileSettings.ReadString('Minecraft','SubIndexName','%version%') + '.json');
+  SubIndexFile := (ProfilePath + '/versions/' + version + '/' +
+    profileSettings.ReadString('Minecraft', 'SubIndexName', '%version%') + '.json');
   SubIndexFile := StringReplace(SubIndexFile, '%version%', version, [rfReplaceAll]);
   CurrentAction := ('Retreving :' + ExtractFileName(SubIndexURL));
   If (authsystem.GetFile(SubIndexURL, SubIndexFile) = False) And
@@ -183,7 +209,6 @@ Begin
   Begin
     HasErrored := True;
     ErrorMsg := 'Couldn' + #39 + 't load SubIndex! Aborting!';
-    HasTerminated := True;
     Terminate;
   End;
   CurrentAction := ('Retreving: ' + version + '.jar');
@@ -199,7 +224,6 @@ Begin
     Begin
       HasErrored := True;
       ErrorMsg := 'Couldn' + #39 + 't retreve ClientJar! Aborting!';
-      HasTerminated := True;
       Exit;
     End;
   End;
@@ -262,7 +286,6 @@ Begin
       Begin
         ErrorMsg := E.ClassName + LineEnding + E.Message;
       End;
-      HasTerminated := True;
       Exit;
     End;
   End;
@@ -300,7 +323,7 @@ Begin
         D.Free;
         P := TJSONParser.Create(currStr);
         D := P.Parse;
-        LibNativeStr := StringReplace(TJSONObject(D).Get('windows'),
+        LibNativeStr := StringReplace( '-'+TJSONObject(D).Get('windows'),
           '${arch}', IntToStr(unit_appUtils.getSystemType()), [rfReplaceAll]);
       End
       Else
@@ -308,7 +331,10 @@ Begin
         LibNativeStr := '';
       End;
       LibStr := (LibPkg + '/' + LibName + '/' + LibVersion + '/' +
-        LibName + '-' + LibVersion + '-' + LibNativeStr + '.jar');
+        LibName + '-' + LibVersion + LibNativeStr + '.jar');
+
+      LibList.Add('/libraries/' + LibStr);               //Hold List for launch!
+
       If (Not FileExists(ProfilePath + '/libraries/' + LibStr)) Then
       Begin
         CurrentAction := 'Retreving lib: ' + LibName;
@@ -321,7 +347,6 @@ Begin
         Begin
           HasErrored := True;
           ErrorMsg := 'Could not retreve missing lib. "' + LibName + '" aborting!';
-          HasTerminated := True;
           Exit;
         End;
       End;
@@ -336,7 +361,6 @@ Begin
       HasErrored := True;
       ErrorMsg := 'LibParse-Error at element: "' + currStr + '"';
       ErrorMsg := ErrorMsg + LineEnding + 'MSG:' + E.Message;
-      HasTerminated := True;
       Exit;
     End;
   End;
@@ -355,7 +379,6 @@ Begin
   Begin
     HasErrored := True;
     ErrorMsg := 'Couldn' + #39 + 't retreve/load AssetIndex! Aborting!';
-    HasTerminated := True;
     Exit;
   End;
 
@@ -372,26 +395,22 @@ Begin
     assetPathLegacy := (ProfilePath + '/assets/virtual/legacy');
     For i := 0 To (D.Count - 1) Do
     Begin
+      if (TJSONObject(D).Items[i].JSONType=jtObject) then begin
       ForceDirectories(ProfilePath + '/assets/' + TJSONObject(D).Names[i]);
-      P2 := TJSONParser.Create(JSONToString(TJSONObject(D).Items[i]));
+      currStr := JSONToString(TJSONObject(D).Items[i]);
+      P2 := TJSONParser.Create(currStr);
       D2 := P2.Parse;
-      mstep:=D2.Count;
+      mstep := D2.Count;
       Synchronize(@ShowStatus);
       For i2 := 0 To (D2.Count - 1) Do
       Begin
+        if (TJSONObject(D2).Items[i2].JSONType=jtObject) then
         step := i2;
         Synchronize(@SetBar);
-      {//---------------------------------------------------
-      //TEST
-        HasErrored := True;
-        ErrorMsg := TJSONObject(D2).Names[0];
-        HasTerminated := True;
-        Exit;
-        //---------------------------------------------------}
-        P3 := TJSONParser.Create(JSONToString(TJSONObject(D2).Items[i2]));
+
+        currStr := JSONToString(TJSONObject(D2).Items[i2]);
+        P3 := TJSONParser.Create(currStr);
         D3 := P3.Parse;
-        //CurrentAction := ('Dir :' + Copy(TJSONObject(D3).Get('hash'), 1, 2));
-        //Synchronize(@ShowStatus);
         ForceDirectories(assetPathLegacy + '/' +
           ExtractFileDir(TJSONObject(D2).Names[i2]));
 
@@ -400,16 +419,13 @@ Begin
         tempAssetPath := ('/' + Copy(TJSONObject(D3).Get('hash'), 1, 2) +
           '/' + TJSONObject(D3).Get('hash'));
 
-        //CurrentAction := ('File :' + tempAssetPath);
-        //Synchronize(@ShowStatus);
-
         tempAssetUrl := webSettings.ReadString('DownloadLocations',
           'Asset', 'http://resources.download.minecraft.net%assetPath%');
         tempAssetUrl := StringReplace(tempAssetUrl, '%assetPath%',
           tempAssetPath, [rfReplaceAll]);
 
-        If (Not FileExists(assetPath +
-            '/' + TJSONObject(D).Names[i] + '/' + tempAssetPath)) Then
+        If (Not FileExists(assetPath + '/' + TJSONObject(D).Names[i] +
+          '/' + tempAssetPath)) Then
         Begin
 
           CurrentAction := ('Retreving :' + tempAssetPath);
@@ -420,7 +436,6 @@ Begin
             HasErrored := True;
             ErrorMsg := ('Couldn' + #39 + 't retreve "' + tempAssetPath +
               '"! Aborting!');
-            HasTerminated := True;
             Exit;
           End
           Else
@@ -435,30 +450,33 @@ Begin
           CurrentAction := ('Skipping [exists] :' + tempAssetPath);
           Synchronize(@ShowStatus);
         End;
-        //P3.Free;
+        //P3.Free; { Access-violation ?! I.o}
         //D3.Free;
         //P2.Free;
         //D2.Free;
       End;
     End;
+    End;
     P.Free;
     D.Free;
+    if (version='1.7.2') then begin
+    CopyDirTree(ProfilePath+'/assets/virtual/legacy/sound',ProfilePath+'/assets/virtual/legacy/sounds');
+    end;
   Except
     on E: Exception Do
     Begin
       HasErrored := True;
       ErrorMsg :=
         ('An error occured while extracting/downloading assets/-information!' +
-        LineEnding + 'Class: ' + E.ClassName + LineEnding + 'MSG: ' + E.Message);
-      HasTerminated := True;
+        LineEnding + 'Class: ' + E.ClassName + LineEnding + 'MSG: ' + E.Message +LineEnding+LineEnding+ currStr);
       Exit;
     End;
   End;
-  { DONE 100 -oL4YG -cDownload+Setup : Download Objects }
-  { TODO 100 -oL4YG -cDownload+Setup : Create startinfo-field in ProfileIndex.ini }
+  { DONE 100 -oL4YG -cDownload+Setup : Download Assets }
+  { TODO 20 -oL4YG -cIdeas : Create startinfo-field in ProfileIndex.ini }
 
-  step:=0;
-  mstep:=0;
+  step := 0;
+  mstep := 0;
   Synchronize(@SetBar);
 End;
 //##############################################################################
@@ -466,12 +484,95 @@ End;
 //############################ Start VANILLA ###################################
 //##############################################################################
 
-procedure TStartThread.StartMC_type_Vanilla();
-var
-  content : TStringList;
-begin
-  { TODO 100 -oL4YG -cDownload+Setup : Start Minecraft }
-end;
+Procedure TStartThread.StartMC_type_Vanilla();
+Var
+  content, tempList: TStringList;
+  P: TJSONParser;
+  D: TJSONData;
+  launchArgs, LibStr, startAct: String;
+  i, argLoc: Integer;
+Begin
+
+  Try
+    content := TStringList.Create;
+    content.LoadFromFile(subIndexFile);
+
+    startAct := 'Create TProcess';
+    mcProc:=TProcess.Create(nil);
+
+    startAct := 'Set currentDir';
+    mcProc.CurrentDirectory := (SysUtils.GetEnvironmentVariable('appdata')+'\'+ProfilePath);
+    startAct:='Create launch parameters';
+
+    P:=TJSONParser.Create(content.Text);
+    D:=P.Parse;
+    LibStr := '"'+mcProc.CurrentDirectory+LibList[0]+'"';
+    LibList.Add('/versions/'+version+'/'+version+'.jar');
+    for i:=1 to (LibList.Count-1) do begin
+      LibStr := LibStr+';"'+mcProc.CurrentDirectory+LibList[i]+'"';
+    end;
+    LibStr := StringReplace(LibStr,'/','\',[rfReplaceAll]);
+
+    tempList:=TStringList.Create;
+    argLoc := TJSONObject(D).IndexOfName('minecraftArguments');
+    jsonUtils.ListItems(D, tempList);
+
+    launchArgs := StringReplace(settings.MainSettings.BaseArgs,'%Libs%',LibStr,  [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'%appdata%',SysUtils.GetEnvironmentVariable('appdata'), [rfReplaceAll]);
+    startAct:='Create launch parameters 2';
+    launchArgs := launchArgs+' '+ profileSettings.ReadString('Minecraft','launchArgs','-XX:PermSize=128M -Xmx1G -Xms512M');
+    startAct:='Create launch parameters 3';
+    launchArgs := launchArgs +' '+(StringReplace(tempList[argLoc],'"','',[rfReplaceAll]));
+    FreeAndNil(tempList);
+    { TODO 100 -oL4YG -cDownload+Setup : Filter/Replace Arg-Placeholder (Token, Nick, etc...) }
+    launchArgs := StringReplace(launchArgs,'${auth_player_name}',UsrObj.username,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${version_name}',version,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${game_directory}','"'+mcProc.CurrentDirectory+'"',[rfReplaceAll]);
+    if (assetIndex<>'legacy') then begin
+    launchArgs := StringReplace(launchArgs,'${assets_root}','"'+mcProc.CurrentDirectory+'/assets'+'"',[rfReplaceAll]);
+    end else begin
+    launchArgs := StringReplace(launchArgs,'${game_assets}','"'+mcProc.CurrentDirectory+'/assets/virtual/legacy'+'"',[rfReplaceAll]);
+    end;
+    launchArgs := StringReplace(launchArgs,'${assets_index_name}',assetIndex,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${auth_uuid}',UsrObj.profileID
+    {UUID is per Profile! not the "clientToken" for whatever reason O.o}
+    ,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${auth_access_token}',UsrObj.accessToken,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${user_properties}',UsrObj.userProps,[rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs,'${user_type}',UsrObj.userType,[rfReplaceAll]);
+    //launchArgs := StringReplace(launchArgs,,,[rfReplaceAll]);
+
+    startAct:='Create launch parameters 4';
+    launchArgs := launchArgs + ' -jar '+'/versions/'+version+'/'+version+'.jar';
+
+
+    startAct := 'Set Executable';
+    mcProc.Executable := settings.MainSettings.javaPath;
+    if (MainSettings.showMCConsole=True) or (profileSettings.ReadBool('Minecraft','showCons',False)=True) then begin
+    startAct := 'Set options';
+    mcProc.ShowWindow := swoShowMinimized;
+    mcProc.Options := [poUsePipes, poStderrToOutPut];
+    Form_consoles.Show;
+    end;
+    startAct := 'Adding Parameters';
+    mcProc.Parameters.Add(launchArgs);
+    startAct := 'Start Process...';
+    mcProc.Execute;
+
+    while mcProc.Running do begin
+      Log.Print(StreamToString(mcProc.Output),Log.Consoles_MC);
+      Sleep(100);
+    end;
+  Except
+    on E: Exception Do
+    Begin
+      HasErrored := True;
+      ErrorMsg := ('An error occured while trying to start Minecraft!' + LineEnding + 'Action: '+ StartAct + LineEnding +
+        'Class: ' + E.ClassName + LineEnding + 'Msg: ' + E.Message);
+      Exit;
+    End;
+  End;
+End;
 
 //##############################################################################
 //############################ END Start VANILLA ###############################
@@ -484,19 +585,23 @@ Begin
   Synchronize(@ShowStatus);
 End;
 
-procedure TStartThread.SetBar;
-begin
-  if (step<>mstep) then begin
-    if (Form_setupMC.ProgressBar_loading.Style=pbstMarquee) then begin
-       Form_setupMC.ProgressBar_loading.Style := pbstNormal;
-    end;
+Procedure TStartThread.SetBar;
+Begin
+  If (step <> mstep) Then
+  Begin
+    If (Form_setupMC.ProgressBar_loading.Style = pbstMarquee) Then
+    Begin
+      Form_setupMC.ProgressBar_loading.Style := pbstNormal;
+    End;
     Form_setupMC.ProgressBar_loading.Max := mstep;
     Form_setupMC.ProgressBar_loading.Position := step;
-  end else begin
+  End
+  Else
+  Begin
     Form_setupMC.ProgressBar_loading.Position := 0;
     Form_setupMC.ProgressBar_loading.Max := 0;
     Form_setupMC.ProgressBar_loading.Style := pbstMarquee;
-  end;
-end;
+  End;
+End;
 
 End.

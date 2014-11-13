@@ -7,7 +7,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   Interfaces, // this includes the LCL widgetset
   Forms, bgrabitmappack, startup, gfflauncher, settings, launcher, login,
   authsystem, errorhandler, objcollection, StartThread,
-setupMC, Profiles, jsonWork { you can add units after this };
+setupMC, Profiles, jsonWork, consoles, Log { you can add units after this };
 
 {$R *.res}
 
@@ -17,5 +17,6 @@ begin
   Application.Initialize;
   Application.CreateForm(TForm_startup, Form_startup);
   Application.CreateForm(TForm_error, Form_error);
+    Application.Createform(Tform_consoles, Form_consoles);
   Application.Run;
 end.

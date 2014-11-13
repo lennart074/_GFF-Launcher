@@ -1,5 +1,5 @@
 object Form_error: TForm_error
-  Left = 2772
+  Left = 2753
   Height = 450
   Top = -52
   Width = 418
@@ -27,8 +27,8 @@ object Form_error: TForm_error
     Height = 18
     Hint = 'An error has occured whilest executing GFF-Launcher.exe!'
     Top = 8
-    Width = 395
-    Caption = 'An error has occured whilst executing GFF-Launcher.exe!'
+    Width = 314
+    Caption = 'An error with GFF-Launcher.exe has occured!'
     Font.CharSet = ANSI_CHARSET
     Font.Color = clRed
     Font.Height = -16
@@ -76,5 +76,14 @@ object Form_error: TForm_error
     Caption = 'Kill'
     OnClick = Button_killClick
     TabOrder = 3
+  end
+  object Button_ignore: TButton
+    Left = 256
+    Height = 23
+    Top = 124
+    Width = 75
+    Caption = 'Ignore'
+    OnClick = Button_ignoreClick
+    TabOrder = 4
   end
 end

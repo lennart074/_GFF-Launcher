@@ -6,31 +6,36 @@ Interface
 
 Uses
   Classes, SysUtils, Fileutil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  StdCtrls,
+  StdCtrls, ExtCtrls,
   { Loading } setupMC,
   { Online } authsystem,
   { Access WebSettings } startup,
   { JSON }jsonUtils, jsonWork {,jsonparser,fpjson},
   { Errors }errorhandler,
-  { INIFiles }IniFiles
+  { INIFiles }IniFiles,
+  { JPEG-Support }JPEGLib
   ;
 
 { DONE 100 -oL4YG -cProfiles : Adding Profiles }
 { TODO 50 -oL4YG -cProfiles : Editing Profiles }
-{ TODO 10 -oL4YG -cProfiles (wishes) : Favourite Profiles }
+{ TODO 10 -oL4YG -cWish_Profiles : Favourite Profiles }
 
 Type
 
   { TForm_Profiles }
 
   TForm_Profiles = Class(TForm)
-      Button_delete: Tbutton;
+    Button_editProfile: TButton;
+    Button_refresh: TButton;
+    Button_delete: TButton;
     Button_cancel: TButton;
     Button_ok: TButton;
     Button_create: TButton;
+    CheckBox_forgeReady: Tcheckbox;
     ComboBox_version: Tcombobox;
     Edit_profileName: TEdit;
     GroupBox_channel: Tgroupbox;
+    Image_backGround: TImage;
     Label_name: Tlabel;
     Label_soon: TLabel;
     Label_info1: TLabel;
@@ -44,21 +49,22 @@ Type
     TabSheet_create: TTabSheet;
     TabSheet_profiles: TTabSheet;
     TabSheet_fav: TTabSheet;
+    Procedure Button_refreshClick(Sender: TObject);
     Procedure Button_cancelclick(Sender: TObject);
     Procedure Button_createclick(Sender: TObject);
-    procedure Button_deleteclick(Sender: Tobject);
+    Procedure Button_deleteclick(Sender: TObject);
     Procedure Button_okclick(Sender: TObject);
     Procedure CreateProfile();
     Procedure FormClose(Sender: TObject; Var Closeaction: Tcloseaction);
     Procedure FormCreate(Sender: TObject);
-    procedure Listbox_profilesselectionchange(Sender: Tobject; User: Boolean);
+    Procedure Listbox_profilesselectionchange(Sender: TObject; User: Boolean);
     Procedure ListProfiles(Directory: String; ToList: TStrings);
     Procedure Radiobutton_alphachange(Sender: TObject);
     Procedure RadioButton_betaChange(Sender: TObject);
     Procedure Radiobutton_prealphachange(Sender: TObject);
     Procedure RadioButton_snapshotChange(Sender: TObject);
     Procedure Radiobutton_releasechange(Sender: TObject);
-    procedure Tabsheet_profilesenter(Sender: Tobject);
+    Procedure Tabsheet_profilesenter(Sender: TObject);
   Private
     { private declarations }
     betaVersions, alphaVersions, preAlphaVersions, Versions, snapshots: TStringList;
@@ -175,39 +181,49 @@ Begin
   Form_Profiles.CreateProfile();
 End;
 
-procedure Tform_profiles.Button_deleteclick(Sender: Tobject);
-begin
-    if (ListBox_profiles.SelCount>0) and (ListBox_profiles.SelCount<2)then begin
-      DeleteDirectory(UsrObj.GFFProfilePath+'/'+ListBox_profiles.GetSelectedText,False);
-    end;
+Procedure Tform_profiles.Button_deleteclick(Sender: TObject);
+Begin
+  If (ListBox_profiles.SelCount > 0) And (ListBox_profiles.SelCount < 2) Then
+  Begin
+    DeleteDirectory(UsrObj.GFFProfilePath + '/' +
+      ListBox_profiles.GetSelectedText, False);
+  End;
 End;
 
 Procedure Tform_profiles.Button_okclick(Sender: TObject);
-var
-  ini : TIniFile;
+Var
+  ini: TIniFile;
 Begin
 
-  If ((Edit_profileName.Text <> '') and (Edit_profileName.Text <> ' ')) And
-    (Not DirectoryExists(UsrObj.GFFProfilePath + '/' + Edit_profileName.Text)) and
-    (ComboBox_version.ItemIndex<>-1) Then
+  If ((Edit_profileName.Text <> '') And (Edit_profileName.Text <> ' ')) And
+    (Not DirectoryExists(UsrObj.GFFProfilePath + '/' + Edit_profileName.Text)) And
+    (ComboBox_version.ItemIndex <> -1) Then
   Begin
     ForceDirectories(UsrObj.GFFProfilePath + '/' + Edit_profileName.Text);
-    ini := TIniFile.Create(UsrObj.GFFProfilePath + '/' + Edit_profileName.Text+'/profileIndex.ini');
-    ini.WriteString('Profile','creator',UsrObj.username);
-    ini.WriteString('Profile','crDate',DateToStr(now));
-    ini.WriteString('Profile','crTime',TimeToStr(now));
-    //ini.WriteBool('Profile','vanilla',true); To be edited later ;)
-    ini.WriteString('Minecraft','version',ComboBox_version.Items[ComboBox_version.ItemIndex]);
-    ini.WriteBool('Minecraft','mc-type',True);
+    ini := TIniFile.Create(UsrObj.GFFProfilePath + '/' +
+      Edit_profileName.Text + '/profileIndex.ini');
+    ini.WriteString('Profile', 'creator', UsrObj.username);
+    ini.WriteString('Profile', 'crDate', DateToStr(now));
+    ini.WriteString('Profile', 'crTime', TimeToStr(now));
+    ini.WriteBool('Profile', 'Forge-Ready', CheckBox_forgeReady.Checked);
+    ini.WriteString('Minecraft', 'version', ComboBox_version.Items[
+      ComboBox_version.ItemIndex]);
+    ini.WriteBool('Minecraft', 'mc-type', True);
     FreeAndNil(ini);
 
     TabSheet_create.Hide;
+    Tabsheet_profilesenter(TabSheet_create);
   End;
 End;
 
 Procedure Tform_profiles.Button_cancelclick(Sender: TObject);
 Begin
   Form_Profiles.Close;
+End;
+
+Procedure Tform_profiles.Button_refreshClick(Sender: TObject);
+Begin
+  Tabsheet_profilesenter(Button_refresh);
 End;
 
 Procedure TForm_Profiles.FormClose(Sender: TObject; Var CloseAction: TCloseAction);
@@ -230,10 +246,38 @@ Begin
   snapshots := TStringList.Create;
 End;
 
-procedure Tform_profiles.Listbox_profilesselectionchange(Sender: Tobject;
-    User: Boolean);
-begin
-      Button_delete.Enabled:= not (ListBox_profiles.GetSelectedText='<your Profiles will appear here>');
+Procedure Tform_profiles.Listbox_profilesselectionchange(Sender: TObject;
+  User: Boolean);
+var
+  jpeg : TJPEGImage;
+Begin
+  Try
+    Button_delete.Enabled := Not (ListBox_profiles.GetSelectedText =
+      '<your Profiles will appear here>');
+    Button_editProfile.Enabled :=
+      Not (ListBox_profiles.GetSelectedText = '<your Profiles will appear here>');
+
+    If FileExists(UsrObj.GFFProfilePath + '/' + ListBox_profiles.GetSelectedText +
+      '/logo.jpg') Then
+    Begin
+      { TODO 90 -oL4YG -cWish_Support : Include Feature to load multiple formats}
+      Jpeg := TJpegImage.Create;
+      Jpeg.LoadFromFile(UsrObj.GFFProfilePath + '/' +
+      ListBox_profiles.GetSelectedText+ '/logo.jpg');
+      Image_backGround.Picture.Bitmap.Assign(jpeg);
+      jpeg.Free;
+    End
+    Else
+    Begin
+      Image_backGround.Picture.Clear;
+    End;
+
+  Except
+    On E: Exception Do
+    Begin
+      Form_error.Handle(E, 'Module: ListBox_Profiles@SelChange', False);
+    End;
+  End;
 End;
 
 Procedure TForm_Profiles.ListProfiles(Directory: String; ToList: TStrings);
@@ -243,7 +287,7 @@ Var
 Begin
   DirList := TStringList.Create;
   gfflauncher.GetSubDirectories(Directory, DirList);
-  TempToList:=TStringList.Create;
+  TempToList := TStringList.Create;
   For I := 0 To (DirList.Count - 1) Do
   Begin
     If (FileExists(DirList[I] + '/ProfileIndex.ini')) Then
@@ -251,9 +295,10 @@ Begin
       TempToList.Add(ExtractFileName(DirList[I]));
     End;
   End;
-  if (TempToList.Count<>ToList.Count) then begin
+  If (TempToList.Count <> ToList.Count) Then
+  Begin
     ToList.Assign(TempToList);
-  end;
+  End;
 
   TempToList.Free;
   DirList.Free;
@@ -309,9 +354,9 @@ Begin
   End;
 End;
 
-procedure Tform_profiles.Tabsheet_profilesenter(Sender: Tobject);
-begin
-    Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,ListBox_profiles.Items);
+Procedure Tform_profiles.Tabsheet_profilesenter(Sender: TObject);
+Begin
+  Form_Profiles.ListProfiles(UsrObj.GFFProfilePath, ListBox_profiles.Items);
 End;
 
 End.

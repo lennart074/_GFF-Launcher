@@ -9,7 +9,7 @@ Uses
 
 Type
   TUserObject = Class(TObject)
-    username, loginName, UUID, profileID, accessToken, GFFProfilePath: String;
+    username, loginName, UUID, profileID, accessToken, GFFProfilePath, userType, userProps: String;
     isOffline, isLegacy: Boolean;
   End;
 

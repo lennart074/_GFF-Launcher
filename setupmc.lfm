@@ -1,7 +1,7 @@
 object Form_setupMC: TForm_setupMC
-  Left = 1961
+  Left = 1730
   Height = 97
-  Top = 110
+  Top = 482
   Width = 320
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog

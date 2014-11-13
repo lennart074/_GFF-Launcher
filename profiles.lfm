@@ -1,33 +1,33 @@
 object Form_Profiles: TForm_Profiles
   Left = 1774
-  Height = 336
+  Height = 309
   Top = 253
-  Width = 392
+  Width = 544
   Caption = 'Form_Profiles'
-  ClientHeight = 336
-  ClientWidth = 392
+  ClientHeight = 309
+  ClientWidth = 544
   OnClose = FormClose
   OnCreate = FormCreate
   Position = poMainFormCenter
   LCLVersion = '1.2.6.0'
   object PageControl_profiles: TPageControl
     Left = 0
-    Height = 320
-    Top = 16
-    Width = 392
-    ActivePage = TabSheet_create
-    TabIndex = 2
+    Height = 309
+    Top = 0
+    Width = 544
+    ActivePage = TabSheet_fav
+    TabIndex = 1
     TabOrder = 0
     object TabSheet_profiles: TTabSheet
       Caption = 'Profiles'
-      ClientHeight = 294
-      ClientWidth = 384
+      ClientHeight = 283
+      ClientWidth = 536
       OnEnter = TabSheet_profilesEnter
       object ListBox_profiles: TListBox
-        Left = 4
-        Height = 288
-        Top = 2
-        Width = 300
+        Left = 0
+        Height = 220
+        Top = 32
+        Width = 176
         Items.Strings = (
           '<your Profiles will appear here>'
         )
@@ -36,44 +36,69 @@ object Form_Profiles: TForm_Profiles
         TabOrder = 0
       end
       object Button_create: TButton
-        Left = 308
+        Left = 461
         Height = 25
-        Top = 265
+        Top = 256
         Width = 75
         Caption = 'Create new'
         OnClick = Button_createClick
         TabOrder = 1
       end
       object Button_delete: TButton
-        Left = 308
+        Left = 384
         Height = 25
-        Top = 2
+        Top = 256
         Width = 75
         Caption = 'Delete'
         OnClick = Button_deleteClick
         TabOrder = 2
       end
+      object Button_refresh: TButton
+        Left = 0
+        Height = 25
+        Top = 0
+        Width = 75
+        Caption = 'Refresh'
+        OnClick = Button_refreshClick
+        TabOrder = 3
+      end
+      object Button_editProfile: TButton
+        Left = 176
+        Height = 25
+        Top = 256
+        Width = 75
+        Caption = 'Edit'
+        Enabled = False
+        TabOrder = 4
+      end
+      object Image_backGround: TImage
+        Left = 176
+        Height = 220
+        Top = 32
+        Width = 360
+        Stretch = True
+      end
     end
     object TabSheet_fav: TTabSheet
       Caption = 'Favourites'
-      ClientHeight = 294
-      ClientWidth = 384
+      ClientHeight = 283
+      ClientWidth = 536
       Enabled = False
       object Label_soon: TLabel
-        Left = 96
-        Height = 37
-        Top = 120
-        Width = 178
+        Left = 0
+        Height = 106
+        Top = 80
+        Width = 530
         Caption = 'Coming soon !'
-        Font.Height = -27
+        Font.Height = -80
         ParentColor = False
         ParentFont = False
       end
     end
     object TabSheet_create: TTabSheet
       Caption = 'Create Profile'
-      ClientHeight = 294
-      ClientWidth = 384
+      ClientHeight = 283
+      ClientWidth = 536
       TabVisible = False
       object ComboBox_version: TComboBox
         Left = 0
@@ -184,6 +209,14 @@ object Form_Profiles: TForm_Profiles
         Width = 160
         TabOrder = 4
         Text = 'New Profile'
+      end
+      object CheckBox_forgeReady: TCheckBox
+        Left = 151
+        Height = 17
+        Top = 48
+        Width = 124
+        Caption = 'Forge-Ready (BETA!)'
+        TabOrder = 5
       end
     end
   end
