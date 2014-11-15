@@ -18811,13 +18811,22 @@ object Form_launcher: TForm_launcher
     OnClick = Button_moreProfilesClick
     TabOrder = 5
   end
+  object Button_delUser: TButton
+    Left = 232
+    Height = 25
+    Top = 8
+    Width = 75
+    Caption = 'Delete User (!)'
+    OnClick = Button_delUserClick
+    TabOrder = 6
+  end
   object Timer_checkLogin: TTimer
     OnTimer = Timer_checkLoginTimer
     left = 736
   end
-  object Timer_synchProfiles: TTimer
+  object Timer_syncProfiles: TTimer
     Interval = 5000
-    OnTimer = Timer_synchProfilesTimer
+    OnTimer = Timer_syncProfilesTimer
     left = 736
     top = 56
   end

@@ -18,6 +18,7 @@ type
         PageControl_Consoles: Tpagecontrol;
         TabSheet_GFFLauncher: Ttabsheet;
         TabSheet_Minecraft: Ttabsheet;
+        procedure Formshow(Sender: Tobject);
     private
         { private declarations }
     public
@@ -30,6 +31,14 @@ var
 implementation
 
 {$R *.lfm}
+
+{ TForm_consoles }
+
+procedure Tform_consoles.Formshow(Sender: Tobject);
+begin
+    console_main.Font.Color := clBlack;
+    console_mc.Font.Color := clBlack;
+End;
 
 end.
 

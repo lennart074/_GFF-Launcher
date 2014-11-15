@@ -15,7 +15,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="185"/>
+      <BuildNr Value="202"/>
       <StringTable Comments="Early-Access Version/Just to send something out" CompanyName="German Fast Forces" FileDescription="GFF-Launcher (Minecraft)" InternalName="GFF(/Galaxy?)-Launcher" LegalCopyright="To be edited" LegalTrademarks="To be edited" OriginalFilename="GFF-Launcher" ProductName="GFF-Launcher" ProductVersion="0.0.0.X"/>
     </VersionInfo>
     <BuildModes Count="1">

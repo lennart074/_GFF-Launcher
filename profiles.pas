@@ -13,12 +13,13 @@ Uses
   { JSON }jsonUtils, jsonWork {,jsonparser,fpjson},
   { Errors }errorhandler,
   { INIFiles }IniFiles,
-  { JPEG-Support }JPEGLib
-  ;
+  { JPEG-Support }JPEGLib,
+  { Setting }settings,
+  { StrUtils }strutils;
 
 { DONE 100 -oL4YG -cProfiles : Adding Profiles }
 { TODO 50 -oL4YG -cProfiles : Editing Profiles }
-{ TODO 10 -oL4YG -cWish_Profiles : Favourite Profiles }
+{ DONE 10 -oL4YG -cWish_Profiles : Favourite Profiles }
 
 Type
 
@@ -35,10 +36,11 @@ Type
     ComboBox_version: Tcombobox;
     Edit_profileName: TEdit;
     GroupBox_channel: Tgroupbox;
+    Image_backGround_fav: TImage;
     Image_backGround: TImage;
     Label_name: Tlabel;
-    Label_soon: TLabel;
     Label_info1: TLabel;
+    ListBox_favs: Tlistbox;
     ListBox_profiles: Tlistbox;
     PageControl_profiles: TPageControl;
     RadioButton_preAlpha: Tradiobutton;
@@ -57,8 +59,13 @@ Type
     Procedure CreateProfile();
     Procedure FormClose(Sender: TObject; Var Closeaction: Tcloseaction);
     Procedure FormCreate(Sender: TObject);
+    Procedure Listbox_favsdblclick(Sender: TObject);
+    Procedure Listbox_favsselectionchange(Sender: TObject; User: Boolean);
+    Procedure Listbox_profilesdblclick(Sender: TObject);
     Procedure Listbox_profilesselectionchange(Sender: TObject; User: Boolean);
     Procedure ListProfiles(Directory: String; ToList: TStrings);
+    Procedure Pagecontrol_profileschanging(Sender: TObject;
+      Var Allowchange: Boolean);
     Procedure Radiobutton_alphachange(Sender: TObject);
     Procedure RadioButton_betaChange(Sender: TObject);
     Procedure Radiobutton_prealphachange(Sender: TObject);
@@ -67,7 +74,9 @@ Type
     Procedure Tabsheet_profilesenter(Sender: TObject);
   Private
     { private declarations }
-    betaVersions, alphaVersions, preAlphaVersions, Versions, snapshots: TStringList;
+    Favourites, betaVersions, alphaVersions, preAlphaVersions, Versions,
+    snapshots: TStringList;
+    CreateNewP: Boolean;
   Public
     { public declarations }
   End;
@@ -89,6 +98,7 @@ Var
   i, i1, i2, i3, i4, i5: Integer;
   sorted: Boolean;
 Begin
+  CreateNewP:=True;
   If Not Assigned(Form_Profiles) Then
   Begin
     Application.CreateForm(TForm_Profiles, Form_Profiles);
@@ -168,12 +178,12 @@ Begin
     End;
   End;
   Form_setupMC.Hide;
-  PageControl_profiles.ActivePage := TabSheet_create;
-  TabSheet_create.Show;
   If Form_Profiles.Visible = False Then
   Begin
     Form_Profiles.Show;
   End;
+  TabSheet_create.Visible := True;
+  PageControl_profiles.ActivePage := TabSheet_create;
 End;
 
 Procedure Tform_profiles.Button_createclick(Sender: TObject);
@@ -187,12 +197,14 @@ Begin
   Begin
     DeleteDirectory(UsrObj.GFFProfilePath + '/' +
       ListBox_profiles.GetSelectedText, False);
+    Button_refreshClick(Button_delete);
   End;
 End;
 
 Procedure Tform_profiles.Button_okclick(Sender: TObject);
 Var
   ini: TIniFile;
+  f: TextFile;
 Begin
 
   If ((Edit_profileName.Text <> '') And (Edit_profileName.Text <> ' ')) And
@@ -210,14 +222,22 @@ Begin
       ComboBox_version.ItemIndex]);
     ini.WriteBool('Minecraft', 'mc-type', True);
     FreeAndNil(ini);
+    if (CheckBox_forgeReady.Checked) then begin
+      AssignFile(f, UsrObj.GFFProfilePath + '/' + Edit_profileName.Text+'/launcher_profiles.json');
+      Rewrite(f);
+      CloseFile(f);
+    end;
 
-    TabSheet_create.Hide;
-    Tabsheet_profilesenter(TabSheet_create);
+    CreateNewP:=False;
+    PageControl_profiles.ActivePage := TabSheet_profiles;
+    TabSheet_create.Visible := False;
+    Button_refreshClick(TabSheet_create);
   End;
 End;
 
 Procedure Tform_profiles.Button_cancelclick(Sender: TObject);
 Begin
+  CreateNewP:=False;
   Form_Profiles.Close;
 End;
 
@@ -227,7 +247,20 @@ Begin
 End;
 
 Procedure TForm_Profiles.FormClose(Sender: TObject; Var CloseAction: TCloseAction);
+Var
+  FavString: String;
+  i: Integer;
 Begin
+  If (Favourites.Count >= 1) Then
+  Begin
+    FavString := Favourites[0];
+    For i := 1 To (Favourites.Count - 1) Do
+    Begin
+      FavString := FavString + '|' + Favourites[i];
+    End;
+    MainSettings.INI.WriteString(UsrObj.username, 'Favourites', FavString);
+  End;
+
   TabSheet_create.Hide;
   DeleteDirectory('GFFLauncher/temp', True);
   Form_launcher.Show;
@@ -238,18 +271,79 @@ Begin
   { Load Profiles(X) | Send them to launcher(X) }
   Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,
     Form_launcher.ComboBox_selectProfile.Items);
+  Form_Profiles.ListProfiles(UsrObj.GFFProfilePath, ListBox_profiles.Items);
+
+  PageControl_profiles.ActivePage := TabSheet_profiles;
 
   betaVersions := TStringList.Create;
   alphaVersions := TStringList.Create;
   preAlphaVersions := TStringList.Create;
   Versions := TStringList.Create;
   snapshots := TStringList.Create;
+  Favourites := TStringList.Create;
+
+  Favourites.Delimiter := ('|');
+  Favourites.StrictDelimiter := True;
+  Favourites.DelimitedText :=
+    MainSettings.INI.ReadString(UsrObj.username, 'Favourites', '');
+  ListBox_favs.Items := Favourites;
+  TabSheet_fav.Caption := 'Favourites (' + IntToStr(Favourites.Count) + ')';
+End;
+
+Procedure Tform_profiles.Listbox_favsdblclick(Sender: TObject);
+Begin
+  If (Length(ListBox_favs.GetSelectedText) > 1) Then
+  Begin
+    Favourites.Delete(Favourites.IndexOf(ListBox_favs.GetSelectedText));
+    ListBox_favs.Items := Favourites;
+    TabSheet_fav.Caption := 'Favourites (' + IntToStr(Favourites.Count) + ')';
+  End;
+End;
+
+Procedure Tform_profiles.Listbox_favsselectionchange(Sender: TObject; User: Boolean);
+Var
+  jpeg: TJPEGImage;
+Begin
+  Try
+    If FileExists(UsrObj.GFFProfilePath + '/' + ListBox_profiles.GetSelectedText +
+      '/logo.jpg') Then
+    Begin
+      { TODO 90 -oL4YG -cWish_Support : Include Feature to load multiple formats}
+      Jpeg := TJpegImage.Create;
+      Jpeg.LoadFromFile(UsrObj.GFFProfilePath + '/' +
+        ListBox_favs.GetSelectedText + '/logo.jpg');
+      Image_backGround_fav.Picture.Bitmap.Assign(jpeg);
+      jpeg.Free;
+    End
+    Else
+    Begin
+      Image_backGround_fav.Picture.Clear;
+    End;
+
+  Except
+    On E: Exception Do
+    Begin
+      Form_error.Handle(E, 'Module: ListBox_Favs@SelChange', False);
+    End;
+  End;
+End;
+
+Procedure Tform_profiles.Listbox_profilesdblclick(Sender: TObject);
+Begin
+  If (Favourites.IndexOf(ListBox_profiles.GetSelectedText) < 0) And
+    (Length(ListBox_profiles.GetSelectedText) >= 1) And
+    (Not (ListBox_profiles.GetSelectedText() = '<your Profiles will appear here>')) Then
+  Begin
+    Form_Profiles.Favourites.Add(ListBox_profiles.GetSelectedText);
+    ListBox_favs.Items := Favourites;
+    TabSheet_fav.Caption := 'Favourites (' + IntToStr(Favourites.Count) + ')';
+  End;
 End;
 
 Procedure Tform_profiles.Listbox_profilesselectionchange(Sender: TObject;
   User: Boolean);
-var
-  jpeg : TJPEGImage;
+Var
+  jpeg: TJPEGImage;
 Begin
   Try
     Button_delete.Enabled := Not (ListBox_profiles.GetSelectedText =
@@ -263,7 +357,7 @@ Begin
       { TODO 90 -oL4YG -cWish_Support : Include Feature to load multiple formats}
       Jpeg := TJpegImage.Create;
       Jpeg.LoadFromFile(UsrObj.GFFProfilePath + '/' +
-      ListBox_profiles.GetSelectedText+ '/logo.jpg');
+        ListBox_profiles.GetSelectedText + '/logo.jpg');
       Image_backGround.Picture.Bitmap.Assign(jpeg);
       jpeg.Free;
     End
@@ -295,13 +389,27 @@ Begin
       TempToList.Add(ExtractFileName(DirList[I]));
     End;
   End;
-  If (TempToList.Count <> ToList.Count) Then
+  If (TempToList.Count <> ToList.Count) or (TempToList.Count=1 or 0) Then
   Begin
     ToList.Assign(TempToList);
   End;
 
   TempToList.Free;
   DirList.Free;
+End;
+
+Procedure Tform_profiles.Pagecontrol_profileschanging(Sender: TObject;
+  Var Allowchange: Boolean);
+Begin
+  If (PageControl_profiles.ActivePage = TabSheet_create) And (CreateNewP = True) Then
+  Begin
+    Allowchange := False;
+    //TabSheet_create.Visible := False;
+  End
+  Else
+  Begin
+    Allowchange := True;
+  End;
 End;
 
 Procedure Tform_profiles.Radiobutton_alphachange(Sender: TObject);

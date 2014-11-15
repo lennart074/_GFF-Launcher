@@ -6,7 +6,7 @@ Interface
 
 Uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Menus,
+  StdCtrls, Menus, LCLType,
   { Main Unit } gfflauncher,
   { Settings } settings,
   { Profiles } Profiles,
@@ -17,6 +17,7 @@ Type
   { TForm_launcher }
 
   TForm_launcher = Class(TForm)
+      Button_delUser: Tbutton;
     Button_moreProfiles: TButton;
     Button_addProfile: TButton;
     Button_options: TButton;
@@ -26,9 +27,10 @@ Type
     Image_back: TImage;
     Label_username1: TLabel;
     Label_username: TLabel;
-    Timer_synchProfiles: Ttimer;
+    Timer_syncProfiles: Ttimer;
     Timer_checkLogin: TTimer;
     Procedure Button_addprofileclick(Sender: TObject);
+    procedure Button_deluserclick(Sender: Tobject);
     Procedure Button_logoutClick(Sender: TObject);
     Procedure Button_moreprofilesclick(Sender: TObject);
     Procedure Button_optionsClick(Sender: TObject);
@@ -38,7 +40,7 @@ Type
     Procedure FormCreate(Sender: TObject);
     Procedure FormShow(Sender: TObject);
     Procedure Timer_checkLoginTimer(Sender: TObject);
-    Procedure Timer_synchprofilestimer(Sender: TObject);
+    Procedure Timer_syncProfilesTimer(Sender: TObject);
   Private
     { private declarations }
   Public
@@ -83,6 +85,24 @@ Procedure Tform_launcher.Button_addprofileclick(Sender: TObject);
 Begin
   Form_launcher.Hide;
   Form_Profiles.CreateProfile;
+End;
+
+procedure Tform_launcher.Button_deluserclick(Sender: Tobject);
+    var
+  Reply, BoxStyle: Integer;
+begin
+  with Application do begin
+    BoxStyle := MB_ICONQUESTION + MB_YESNO;
+    Reply := MessageBox('Are you sure to delete ALL references of this user ? (Everything will be lost!)', 'Warning!', BoxStyle);
+    if Reply = IDYES then begin
+      MessageBox('Erasing data! This may durate a moment...', 'Deleting',MB_ICONINFORMATION);
+      MainSettings.INI.EraseSection(UsrObj.username);
+  DeleteDirectory(UsrObj.GFFProfilePath, False);
+  MessageBox('Erased all user Information, will return to login!', 'Finished',MB_ICONINFORMATION);
+  Button_logoutClick(Button_delUser);
+  end
+  else MessageBox('Good choise ;)', ';P', MB_ICONINFORMATION);
+  end;
 End;
 
 Procedure TForm_launcher.Button_optionsClick(Sender: TObject);
@@ -148,10 +168,13 @@ Begin
   End;
 End;
 
-Procedure Tform_launcher.Timer_synchprofilestimer(Sender: TObject);
+Procedure Tform_launcher.Timer_syncProfilesTimer(Sender: TObject);
 Begin
   Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,
     ComboBox_selectProfile.Items);
+  if (ComboBox_selectProfile.Items.Count<1) then begin
+    ComboBox_selectProfile.Text := '<Pls. Create A Profile>';
+  end;
 End;
 
 End.

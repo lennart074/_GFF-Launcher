@@ -6,6 +6,7 @@ object Form_Profiles: TForm_Profiles
   Caption = 'Form_Profiles'
   ClientHeight = 309
   ClientWidth = 544
+  FormStyle = fsStayOnTop
   OnClose = FormClose
   OnCreate = FormCreate
   Position = poMainFormCenter
@@ -15,9 +16,10 @@ object Form_Profiles: TForm_Profiles
     Height = 309
     Top = 0
     Width = 544
-    ActivePage = TabSheet_fav
-    TabIndex = 1
+    ActivePage = TabSheet_create
+    TabIndex = 2
     TabOrder = 0
+    OnChanging = PageControl_profilesChanging
     object TabSheet_profiles: TTabSheet
       Caption = 'Profiles'
       ClientHeight = 283
@@ -32,6 +34,7 @@ object Form_Profiles: TForm_Profiles
           '<your Profiles will appear here>'
         )
         ItemHeight = 13
+        OnDblClick = ListBox_profilesDblClick
         OnSelectionChange = ListBox_profilesSelectionChange
         TabOrder = 0
       end
@@ -83,16 +86,21 @@ object Form_Profiles: TForm_Profiles
       Caption = 'Favourites'
       ClientHeight = 283
       ClientWidth = 536
-      Enabled = False
-      object Label_soon: TLabel
+      object ListBox_favs: TListBox
         Left = 0
-        Height = 106
-        Top = 80
-        Width = 530
-        Caption = 'Coming soon !'
-        Font.Height = -80
-        ParentColor = False
-        ParentFont = False
+        Height = 256
+        Top = 0
+        Width = 176
+        ItemHeight = 0
+        OnDblClick = ListBox_favsDblClick
+        OnSelectionChange = ListBox_favsSelectionChange
+        TabOrder = 0
+      end
+      object Image_backGround_fav: TImage
+        Left = 176
+        Height = 256
+        Top = 0
+        Width = 362
       end
     end
     object TabSheet_create: TTabSheet
@@ -177,18 +185,18 @@ object Form_Profiles: TForm_Profiles
         ParentColor = False
       end
       object Button_ok: TButton
-        Left = 308
+        Left = 456
         Height = 25
-        Top = 264
+        Top = 256
         Width = 75
         Caption = 'Ok (Create)'
         OnClick = Button_okClick
         TabOrder = 2
       end
       object Button_cancel: TButton
-        Left = 232
+        Left = 376
         Height = 25
-        Top = 264
+        Top = 256
         Width = 75
         Caption = 'Cancel'
         OnClick = Button_cancelClick

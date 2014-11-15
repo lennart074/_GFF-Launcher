@@ -30,6 +30,8 @@ Type
     Button_OK: TButton;
     Button_setMem: TButton;
     Button_browseJava: TButton;
+    CheckBox_mcConsole: Tcheckbox;
+    CheckBox_gffConsole: Tcheckbox;
     CheckBox_customMemory: TCheckBox;
     CheckBox_customJava: TCheckBox;
     Edit_javaPath: TEdit;
@@ -43,6 +45,7 @@ Type
     Procedure Button_setMemClick(Sender: TObject);
     Procedure CheckBox_customJavaChange(Sender: TObject);
     Procedure CheckBox_customMemoryChange(Sender: TObject);
+    procedure Checkbox_mcconsolechange(Sender: Tobject);
     Procedure FormCreate(Sender: TObject);
     Procedure FormShow(Sender: TObject);
     Procedure SpinEdit_ramChange(Sender: TObject);
@@ -112,6 +115,8 @@ Begin
   End;
   Button_setMem.Enabled := False;
   SpinEdit_ram.Value := MainSettings.Memory;
+
+  CheckBox_mcConsole.Checked := MainSettings.INI.ReadBool('Minecraft','showCons',False);
 End;
 
 Procedure TForm_settings.SpinEdit_ramChange(Sender: TObject);
@@ -165,9 +170,11 @@ End;
 
 Procedure TForm_settings.Button_resetClick(Sender: TObject);
 Begin
-  DeleteFile(MainSettings.settingsFile);
+  MainSettings.WriteFile;
+  //DeleteFile(MainSettings.settingsFile);
   Form_settings.Hide;
-  FormCreate(Form_settings);
+  //FormCreate(Form_settings);
+  MainSettings.ReadFile;
   Form_settings.Show;
 End;
 
@@ -200,6 +207,11 @@ Begin
     SpinEdit_ram.Value := 1024;
     Button_setMemClick(Form_settings);
   End;
+End;
+
+procedure Tform_settings.Checkbox_mcconsolechange(Sender: Tobject);
+begin
+    MainSettings.INI.WriteBool('Minecraft', 'showCons',CheckBox_mcConsole.Checked);
 End;
 
 ////////////////////////////////////////////////////////////////////////////////

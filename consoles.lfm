@@ -4,11 +4,12 @@ object Form_consoles: TForm_consoles
   Top = 106
   Width = 513
   BorderIcons = []
-  BorderStyle = bsDialog
+  BorderStyle = bsSingle
   Caption = 'Form_consoles'
   ClientHeight = 385
   ClientWidth = 513
   Color = clBlack
+  OnShow = FormShow
   Position = poDefault
   LCLVersion = '1.2.6.0'
   object PageControl_Consoles: TPageControl
@@ -30,7 +31,9 @@ object Form_consoles: TForm_consoles
         Height = 360
         Top = 0
         Width = 504
-        Color = clBlack
+        Color = clSilver
+        Font.Color = clBlack
+        ParentFont = False
         ReadOnly = True
         ScrollBars = ssAutoBoth
         TabOrder = 0
@@ -45,7 +48,9 @@ object Form_consoles: TForm_consoles
         Height = 376
         Top = 0
         Width = 504
-        Color = clBlack
+        Color = clSilver
+        Font.Color = clBlack
+        ParentFont = False
         ReadOnly = True
         ScrollBars = ssAutoBoth
         TabOrder = 0

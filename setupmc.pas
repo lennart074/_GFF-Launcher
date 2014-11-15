@@ -78,7 +78,6 @@ End;
 procedure TForm_setupMC.SetupMC(Profile:String);
 begin
   if FileExists(UsrObj.GFFProfilePath+'/'+Profile+'/profileIndex.ini') then begin
-     //ShowMessage(UsrObj.GFFProfilePath+'/'+Profile+'/profileIndex.ini');
      SetupThread:=TStartThread.Create(True);
      SetupThread.ProfilePath := UsrObj.GFFProfilePath+'/'+Profile;
      SetupThread.profileSettingsFile := (UsrObj.GFFProfilePath+'/'+Profile+'/profileIndex.ini');
@@ -87,7 +86,7 @@ begin
      Application.ProcessMessages;
      SetupThread.Start;
   end else begin
-    ShowMessage('Profile:'+Profile+': not found!');
+    ShowMessage('Profile:'+Profile+': not found!'+LineEnding+'How did you manage to get this ?!');
   end;
 end;
 
@@ -98,10 +97,13 @@ begin
         Timer_threadWatch.Enabled := False;
         ShowMessage(SetupThread.ErrorMsg);
         Form_setupMC.Close;
+        //FreeAndNil(SetupThread);
       end;
-      //ShowMessage(BoolToString(SetupThread.HasTerminated));
+      if (SetupThread.CurrentAction='Thread finished!') then begin
+         Form_setupMC.Close;
+         FreeAndNil(SetupThread);
+      end;
       Application.ProcessMessages;
-      //StaticText_threadAction.Caption := SetupThread.CurrentAction;
     end;
 End;
 

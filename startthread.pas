@@ -11,8 +11,7 @@ Uses
   { INIFiles } IniFiles,
   { JSON-Units } jsonUtils, fpjson, jsonparser,
   { Utils } unit_appUtils, FileUtil,
-  { Log/Consoles }Log
-  ;
+  { Log/Consoles }Log;
 
 Type
   TStartThread = Class(TThread)
@@ -26,6 +25,7 @@ Type
     Procedure StartMC_type_Vanilla();
 
     Procedure ShowStatus;
+    Procedure PrintLog;
     Procedure SetBar;
     Procedure HandleTopLevel;
     Procedure Test;
@@ -43,8 +43,8 @@ Type
     Error: Exception;
     step, mstep: Integer;
     LibList: TStringList;
-    subIndexFile, JarPath: String;
-    mcProc : TProcess;
+    subIndexFile, JarPath, logLine, logCons, mainClass: String;
+    mcProc: TProcess;
   Private
     {Pivate Declarations}
   End;
@@ -59,8 +59,7 @@ Uses { SetupMC } setupMC,
   { Errors } errorhandler,
   { Settings } settings,
   { Console Access } consoles,
-  { userdata } login
-  ;
+  { userdata } login;
 
 Procedure TStartThread.ShowStatus;
 Begin
@@ -88,7 +87,7 @@ Begin
 
 
 
-        If (HasErrored) Then
+    If (HasErrored) Then
     Begin
       FreeOnTerminate := False;
       HasTerminated := True;
@@ -151,8 +150,7 @@ End;
 //##############################################################################
 Procedure TStartThread.GetInformation_type_Vanilla();
 Var
-  SubIndexURL, AssetIndexFile, AssetIndexURL,
-  LibStr, currStr, tempURL: String;
+  SubIndexURL, AssetIndexFile, AssetIndexURL, LibStr, currStr, tempURL, NNLibUrl: String;
   P: TJSONParser;
   D: TJSONData;
   items, names, content, tempList: TStringList;
@@ -189,12 +187,28 @@ Begin
   ForceDirectories(ProfilePath + '/libraries');
   ForceDirectories(ProfilePath + '/versions/' + version);
   ForceDirectories(ProfilePath + '/resourcepacks');
-  if (profileSettings.ReadBool('Profile','Forge-Ready',False)) then begin
-     tempList:=TStringList.Create;
-     tempList.Add('');
-     tempList.SaveToFile(ProfilePath+'/launcher_profiles.json');
-     FreeAndNil(tempList);
-  end;
+  If (profileSettings.ReadBool('Profile', 'Forge-Ready', False)) Then
+  Begin
+    tempList := TStringList.Create;
+    tempList.Add('');
+    tempList.SaveToFile(ProfilePath + '/launcher_profiles.json');
+    FreeAndNil(tempList);
+  End;
+
+  If (profileSettings.ReadBool('Profile', 'forge-ready', False)) Then
+  Begin
+    tempList := TStringList.Create;
+    GetSubDirs(ProfilePath + '/versions', tempList);
+    fIndex := (FindMatchStr(tempList, 'forge'));
+    If (fIndex >= 0) Then
+    Begin
+      DeleteDirectory(ProfilePath + '/versions/' + version, True);
+      CopyFile(ProfilePath + '/versions/' + tempList[fIndex] + '/' +
+        tempList[fIndex] + '.jar', ProfilePath + '/version/' + version + '/' + version + '.jar');
+      CopyFile(ProfilePath + '/versions/' + tempList[fIndex] + '/' +
+        tempList[fIndex] + '.json', ProfilePath + '/version/' + version + '/' + version + '.json');
+    End;
+  End;
 
   //Download SubIndex
   SubIndexURL := webSettings.ReadString('DownloadLocation', 'SubIndex',
@@ -204,12 +218,16 @@ Begin
     profileSettings.ReadString('Minecraft', 'SubIndexName', '%version%') + '.json');
   SubIndexFile := StringReplace(SubIndexFile, '%version%', version, [rfReplaceAll]);
   CurrentAction := ('Retreving :' + ExtractFileName(SubIndexURL));
-  If (authsystem.GetFile(SubIndexURL, SubIndexFile) = False) And
-    (FileExists(SubIndexFile) = False) Then
+  If (profileSettings.ReadBool('Profile', 'forge-ready', False) = False) And
+    (FileExists(subIndexFile)) Then
   Begin
-    HasErrored := True;
-    ErrorMsg := 'Couldn' + #39 + 't load SubIndex! Aborting!';
-    Terminate;
+    If (authsystem.GetFile(SubIndexURL, SubIndexFile) = False) And
+      (FileExists(SubIndexFile) = False) Then
+    Begin
+      HasErrored := True;
+      ErrorMsg := 'Couldn' + #39 + 't load SubIndex! Aborting!';
+      Terminate;
+    End;
   End;
   CurrentAction := ('Retreving: ' + version + '.jar');
   Synchronize(@ShowStatus);
@@ -245,6 +263,9 @@ Begin
     Begin
       assetIndex := TJSONObject(D).Get('assets');
     End;
+
+    mainClass := TJSONObject(D).Get('mainClass');
+
     { DONE 100 -oL4YG -cDownload+Setup : Extract "Information" of SubIndex!}
     P.Free;
     //=========================================================================
@@ -262,7 +283,10 @@ Begin
     LibStr := tempList[LibStrLoc];
     content.Clear;
     D.Free;
+    //Make String compatible to FPJSON
     currStr := StringReplace(LibStr, '\', '', [rfReplaceAll]);
+    currStr := StringReplace(LibStr, ':true', ':"True" ', [rfReplaceAll, rfIgnoreCase]);
+
     P := TJSONParser.Create(currStr);
     D := P.Parse;
     For i := 0 To (D.Count - 1) Do
@@ -284,7 +308,7 @@ Begin
       End
       Else
       Begin
-        ErrorMsg := E.ClassName + LineEnding + E.Message;
+        ErrorMsg := E.ClassName + LineEnding + E.Message + LineEnding + currStr;
       End;
       Exit;
     End;
@@ -309,6 +333,11 @@ Begin
       P := TJSONParser.Create(currStr);
       D := P.Parse;
       LibStr := TJSONObject(D).Get('name');
+      NNLibUrl := '';
+      If (TJSONObject(D).IndexOfName('url') >= 0) Then
+      Begin
+        NNLibUrl := TJSONObject(D).Get('url') + '%LibPath%';
+      End;
       tempList := TStringList.Create;
       tempList.StrictDelimiter := True;
       tempList.Delimiter := ':';
@@ -323,7 +352,7 @@ Begin
         D.Free;
         P := TJSONParser.Create(currStr);
         D := P.Parse;
-        LibNativeStr := StringReplace( '-'+TJSONObject(D).Get('windows'),
+        LibNativeStr := StringReplace('-' + TJSONObject(D).Get('windows'),
           '${arch}', IntToStr(unit_appUtils.getSystemType()), [rfReplaceAll]);
       End
       Else
@@ -339,9 +368,18 @@ Begin
       Begin
         CurrentAction := 'Retreving lib: ' + LibName;
         Synchronize(@ShowStatus);
-        tempURL := StringReplace(webSettings.ReadString(
-          'DownloadLocation', 'Libs', 'https://libraries.minecraft.net/%LibPath%'),
-          '%LibPath%', LibStr, [rfReplaceAll]);
+        If (NNLibUrl <> '') Then
+        Begin
+          tempURL := StringReplace(NNLibUrl, '%LibPath%', LibStr,
+            [rfReplaceAll]);
+          ;
+        End
+        Else
+        Begin
+          tempURL := StringReplace(webSettings.ReadString(
+            'DownloadLocation', 'Libs', 'https://libraries.minecraft.net/%LibPath%'),
+            '%LibPath%', LibStr, [rfReplaceAll]);
+        End;
         If (Not authsystem.GetBinFile(tempURL, ProfilePath + '/libraries/' +
           LibStr)) Then
         Begin
@@ -374,12 +412,16 @@ Begin
   AssetIndexURL := (StringReplace(AssetIndexURL, '%index%', assetIndex, [rfReplaceAll]));
   AssetIndexFile := (ProfilePath + '/assets/indexes/' + assetIndex + '.json');
   CurrentAction := ('Retreving :' + ExtractFileName(AssetIndexURL));
-  If (authsystem.GetFile(AssetIndexURL, AssetIndexFile) = False) And
-    (FileExists(AssetIndexFile) = False) Then
+  If (profileSettings.ReadBool('Profile', 'forge-ready', False) = False) And
+    (FileExists(AssetIndexFile)) Then
   Begin
-    HasErrored := True;
-    ErrorMsg := 'Couldn' + #39 + 't retreve/load AssetIndex! Aborting!';
-    Exit;
+    If (authsystem.GetFile(AssetIndexURL, AssetIndexFile) = False) And
+      (FileExists(AssetIndexFile) = False) Then
+    Begin
+      HasErrored := True;
+      ErrorMsg := 'Couldn' + #39 + 't retreve/load AssetIndex! Aborting!';
+      Exit;
+    End;
   End;
 
   CurrentAction := ('Exctracting Asset-Info...');
@@ -395,80 +437,84 @@ Begin
     assetPathLegacy := (ProfilePath + '/assets/virtual/legacy');
     For i := 0 To (D.Count - 1) Do
     Begin
-      if (TJSONObject(D).Items[i].JSONType=jtObject) then begin
-      ForceDirectories(ProfilePath + '/assets/' + TJSONObject(D).Names[i]);
-      currStr := JSONToString(TJSONObject(D).Items[i]);
-      P2 := TJSONParser.Create(currStr);
-      D2 := P2.Parse;
-      mstep := D2.Count;
-      Synchronize(@ShowStatus);
-      For i2 := 0 To (D2.Count - 1) Do
+      If (TJSONObject(D).Items[i].JSONType = jtObject) Then
       Begin
-        if (TJSONObject(D2).Items[i2].JSONType=jtObject) then
-        step := i2;
-        Synchronize(@SetBar);
-
-        currStr := JSONToString(TJSONObject(D2).Items[i2]);
-        P3 := TJSONParser.Create(currStr);
-        D3 := P3.Parse;
-        ForceDirectories(assetPathLegacy + '/' +
-          ExtractFileDir(TJSONObject(D2).Names[i2]));
-
-        ForceDirectories(assetPath + '/' + TJSONObject(D).Names[i] +
-          '/' + Copy(TJSONObject(D3).Get('hash'), 1, 2));
-        tempAssetPath := ('/' + Copy(TJSONObject(D3).Get('hash'), 1, 2) +
-          '/' + TJSONObject(D3).Get('hash'));
-
-        tempAssetUrl := webSettings.ReadString('DownloadLocations',
-          'Asset', 'http://resources.download.minecraft.net%assetPath%');
-        tempAssetUrl := StringReplace(tempAssetUrl, '%assetPath%',
-          tempAssetPath, [rfReplaceAll]);
-
-        If (Not FileExists(assetPath + '/' + TJSONObject(D).Names[i] +
-          '/' + tempAssetPath)) Then
+        ForceDirectories(ProfilePath + '/assets/' + TJSONObject(D).Names[i]);
+        currStr := JSONToString(TJSONObject(D).Items[i]);
+        P2 := TJSONParser.Create(currStr);
+        D2 := P2.Parse;
+        mstep := D2.Count;
+        Synchronize(@ShowStatus);
+        For i2 := 0 To (D2.Count - 1) Do
         Begin
+          If (TJSONObject(D2).Items[i2].JSONType = jtObject) Then
+            step := i2;
+          Synchronize(@SetBar);
 
-          CurrentAction := ('Retreving :' + tempAssetPath);
-          Synchronize(@ShowStatus);
-          If (Not authsystem.GetBinFile(tempAssetUrl, assetPath +
-            '/' + TJSONObject(D).Names[i] + '/' + tempAssetPath)) Then
+          currStr := JSONToString(TJSONObject(D2).Items[i2]);
+          P3 := TJSONParser.Create(currStr);
+          D3 := P3.Parse;
+          ForceDirectories(assetPathLegacy + '/' +
+            ExtractFileDir(TJSONObject(D2).Names[i2]));
+
+          ForceDirectories(assetPath + '/' + TJSONObject(D).Names[i] +
+            '/' + Copy(TJSONObject(D3).Get('hash'), 1, 2));
+          tempAssetPath := ('/' + Copy(TJSONObject(D3).Get('hash'), 1, 2) +
+            '/' + TJSONObject(D3).Get('hash'));
+
+          tempAssetUrl := webSettings.ReadString('DownloadLocations',
+            'Asset', 'http://resources.download.minecraft.net%assetPath%');
+          tempAssetUrl := StringReplace(tempAssetUrl, '%assetPath%',
+            tempAssetPath, [rfReplaceAll]);
+
+          If (Not FileExists(assetPath + '/' + TJSONObject(D).Names[i] +
+            '/' + tempAssetPath)) Then
           Begin
-            HasErrored := True;
-            ErrorMsg := ('Couldn' + #39 + 't retreve "' + tempAssetPath +
-              '"! Aborting!');
-            Exit;
+
+            CurrentAction := ('Retreving :' + tempAssetPath);
+            Synchronize(@ShowStatus);
+            If (Not authsystem.GetBinFile(tempAssetUrl, assetPath +
+              '/' + TJSONObject(D).Names[i] + '/' + tempAssetPath)) Then
+            Begin
+              HasErrored := True;
+              ErrorMsg := ('Couldn' + #39 + 't retreve "' + tempAssetPath +
+                '"! Aborting!');
+              Exit;
+            End
+            Else
+            Begin
+              CopyFile((assetPath + '/' + TJSONObject(D).Names[i] + '/' + tempAssetPath),
+                (assetPathLegacy + '/' + TJSONObject(D2).Names[i2]));
+            End;
+
           End
           Else
           Begin
-            CopyFile((assetPath + '/' + TJSONObject(D).Names[i] + '/' + tempAssetPath),
-              (assetPathLegacy + '/' + TJSONObject(D2).Names[i2]));
+            CurrentAction := ('Skipping [exists] :' + tempAssetPath);
+            Synchronize(@ShowStatus);
           End;
-
-        End
-        Else
-        Begin
-          CurrentAction := ('Skipping [exists] :' + tempAssetPath);
-          Synchronize(@ShowStatus);
+          //P3.Free; { Access-violation ?! I.o}
+          //D3.Free;
+          //P2.Free;
+          //D2.Free;
         End;
-        //P3.Free; { Access-violation ?! I.o}
-        //D3.Free;
-        //P2.Free;
-        //D2.Free;
       End;
-    End;
     End;
     P.Free;
     D.Free;
-    if (version='1.7.2') then begin
-    CopyDirTree(ProfilePath+'/assets/virtual/legacy/sound',ProfilePath+'/assets/virtual/legacy/sounds');
-    end;
+    If (version = '1.7.2') Then
+    Begin
+      CopyDirTree(ProfilePath + '/assets/virtual/legacy/sound',
+        ProfilePath + '/assets/virtual/legacy/sounds');
+    End;
   Except
     on E: Exception Do
     Begin
       HasErrored := True;
       ErrorMsg :=
         ('An error occured while extracting/downloading assets/-information!' +
-        LineEnding + 'Class: ' + E.ClassName + LineEnding + 'MSG: ' + E.Message +LineEnding+LineEnding+ currStr);
+        LineEnding + 'Class: ' + E.ClassName + LineEnding + 'MSG: ' +
+        E.Message + LineEnding + LineEnding + currStr);
       Exit;
     End;
   End;
@@ -494,81 +540,118 @@ Var
 Begin
 
   Try
+    CurrentAction := 'Creating Process...';
+    Synchronize(@ShowStatus);
+
     content := TStringList.Create;
     content.LoadFromFile(subIndexFile);
 
     startAct := 'Create TProcess';
-    mcProc:=TProcess.Create(nil);
+    mcProc := TProcess.Create(nil);
 
     startAct := 'Set currentDir';
-    mcProc.CurrentDirectory := (SysUtils.GetEnvironmentVariable('appdata')+'\'+ProfilePath);
-    startAct:='Create launch parameters';
+    mcProc.CurrentDirectory :=
+      (SysUtils.GetEnvironmentVariable('appdata') + '\' + ProfilePath);
+    startAct := 'Create launch parameters';
 
-    P:=TJSONParser.Create(content.Text);
-    D:=P.Parse;
-    LibStr := '"'+mcProc.CurrentDirectory+LibList[0]+'"';
-    LibList.Add('/versions/'+version+'/'+version+'.jar');
-    for i:=1 to (LibList.Count-1) do begin
-      LibStr := LibStr+';"'+mcProc.CurrentDirectory+LibList[i]+'"';
-    end;
-    LibStr := StringReplace(LibStr,'/','\',[rfReplaceAll]);
+    P := TJSONParser.Create(content.Text);
+    D := P.Parse;
+    LibStr := '"' + mcProc.CurrentDirectory + LibList[0] + '"';
+    LibList.Add('/versions/' + version + '/' + version + '.jar');
+    For i := 1 To (LibList.Count - 1) Do
+    Begin
+      LibStr := LibStr + ';"' + mcProc.CurrentDirectory + LibList[i] + '"';
+    End;
+    LibStr := StringReplace(LibStr, '/', '\', [rfReplaceAll]);
 
-    tempList:=TStringList.Create;
+    tempList := TStringList.Create;
     argLoc := TJSONObject(D).IndexOfName('minecraftArguments');
     jsonUtils.ListItems(D, tempList);
 
-    launchArgs := StringReplace(settings.MainSettings.BaseArgs,'%Libs%',LibStr,  [rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'%appdata%',SysUtils.GetEnvironmentVariable('appdata'), [rfReplaceAll]);
-    startAct:='Create launch parameters 2';
-    launchArgs := launchArgs+' '+ profileSettings.ReadString('Minecraft','launchArgs','-XX:PermSize=128M -Xmx1G -Xms512M');
-    startAct:='Create launch parameters 3';
-    launchArgs := launchArgs +' '+(StringReplace(tempList[argLoc],'"','',[rfReplaceAll]));
+    launchArgs := StringReplace(settings.MainSettings.BaseArgs, '%Libs%',
+      LibStr, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '%mainClass%', mainClass, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '%appdata%',
+      SysUtils.GetEnvironmentVariable('appdata'), [rfReplaceAll]);
+    startAct := 'Create launch parameters 2';
+    launchArgs := launchArgs + ' ' + profileSettings.ReadString(
+      'Minecraft', 'launchArgs', '-XX:PermSize=128M -Xmx1G -Xms512M');
+    startAct := 'Create launch parameters 3';
+    launchArgs := launchArgs + ' ' +
+      (StringReplace(tempList[argLoc], '"', '', [rfReplaceAll]));
     FreeAndNil(tempList);
-    { TODO 100 -oL4YG -cDownload+Setup : Filter/Replace Arg-Placeholder (Token, Nick, etc...) }
-    launchArgs := StringReplace(launchArgs,'${auth_player_name}',UsrObj.username,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${version_name}',version,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${game_directory}','"'+mcProc.CurrentDirectory+'"',[rfReplaceAll]);
-    if (assetIndex<>'legacy') then begin
-    launchArgs := StringReplace(launchArgs,'${assets_root}','"'+mcProc.CurrentDirectory+'/assets'+'"',[rfReplaceAll]);
-    end else begin
-    launchArgs := StringReplace(launchArgs,'${game_assets}','"'+mcProc.CurrentDirectory+'/assets/virtual/legacy'+'"',[rfReplaceAll]);
-    end;
-    launchArgs := StringReplace(launchArgs,'${assets_index_name}',assetIndex,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${auth_uuid}',UsrObj.profileID
-    {UUID is per Profile! not the "clientToken" for whatever reason O.o}
-    ,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${auth_access_token}',UsrObj.accessToken,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${user_properties}',UsrObj.userProps,[rfReplaceAll]);
-    launchArgs := StringReplace(launchArgs,'${user_type}',UsrObj.userType,[rfReplaceAll]);
+    { DONE 100 -oL4YG -cDownload+Setup : Filter/Replace Arg-Placeholder (Token, Nick, etc...) }
+    launchArgs := StringReplace(launchArgs, '${auth_player_name}',
+      UsrObj.username, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${version_name}', version, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${game_directory}', '"' +
+      mcProc.CurrentDirectory + '"', [rfReplaceAll]);
+    If (assetIndex <> 'legacy') Then
+    Begin
+      launchArgs := StringReplace(launchArgs, '${assets_root}', '"' +
+        mcProc.CurrentDirectory + '/assets' + '"', [rfReplaceAll]);
+    End
+    Else
+    Begin
+      launchArgs := StringReplace(launchArgs, '${game_assets}', '"' +
+        mcProc.CurrentDirectory + '/assets/virtual/legacy' + '"', [rfReplaceAll]);
+    End;
+    launchArgs := StringReplace(launchArgs, '${assets_index_name}',
+      assetIndex, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${auth_uuid}', UsrObj.profileID
+      {UUID is per Profile! not the "clientToken" for whatever reason O.o}
+      , [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${auth_access_token}',
+      UsrObj.accessToken, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${user_properties}',
+      UsrObj.userProps, [rfReplaceAll]);
+    launchArgs := StringReplace(launchArgs, '${user_type}', UsrObj.userType,
+      [rfReplaceAll]);
     //launchArgs := StringReplace(launchArgs,,,[rfReplaceAll]);
 
-    startAct:='Create launch parameters 4';
-    launchArgs := launchArgs + ' -jar '+'/versions/'+version+'/'+version+'.jar';
+    startAct := 'Create launch parameters 4';
+    launchArgs := launchArgs + ' -jar ' + '/versions/' + version +
+      '/' + version + '.jar';
 
 
     startAct := 'Set Executable';
     mcProc.Executable := settings.MainSettings.javaPath;
-    if (MainSettings.showMCConsole=True) or (profileSettings.ReadBool('Minecraft','showCons',False)=True) then begin
-    startAct := 'Set options';
-    mcProc.ShowWindow := swoShowMinimized;
-    mcProc.Options := [poUsePipes, poStderrToOutPut];
-    Form_consoles.Show;
-    end;
+
+    If (MainSettings.showMCConsole = True) Or
+      (profileSettings.ReadBool('Minecraft', 'showCons', False) = True) Then
+    Begin
+      startAct := 'Set options';
+      mcProc.ShowWindow := swoShowMinimized;
+      mcProc.Options := [poUsePipes, poStderrToOutPut];
+      Form_consoles.Show;
+    End;
     startAct := 'Adding Parameters';
     mcProc.Parameters.Add(launchArgs);
     startAct := 'Start Process...';
+
+    CurrentAction := 'Starting Minecraft...';
+    Synchronize(@ShowStatus);
+
     mcProc.Execute;
 
-    while mcProc.Running do begin
-      Log.Print(StreamToString(mcProc.Output),Log.Consoles_MC);
+    While (mcProc.Running) And ((MainSettings.showMCConsole = True) Or
+        (profileSettings.ReadBool('Minecraft', 'showCons', False) = True)) Do
+    Begin
+      logLine := StreamToString(mcProc.Output);
+      If Length(LogLine) > 1 Then
+      Begin
+        logCons := Log.Consoles_MC;
+        Synchronize(@PrintLog);
+      End;
       Sleep(100);
-    end;
+    End;
   Except
     on E: Exception Do
     Begin
       HasErrored := True;
-      ErrorMsg := ('An error occured while trying to start Minecraft!' + LineEnding + 'Action: '+ StartAct + LineEnding +
-        'Class: ' + E.ClassName + LineEnding + 'Msg: ' + E.Message);
+      ErrorMsg := ('An error occured while trying to start Minecraft!' +
+        LineEnding + 'Action: ' + StartAct + LineEnding + 'Class: ' +
+        E.ClassName + LineEnding + 'Msg: ' + E.Message);
       Exit;
     End;
   End;
@@ -578,6 +661,11 @@ End;
 //############################ END Start VANILLA ###############################
 //##############################################################################
 //##############################################################################
+
+Procedure TStartThread.PrintLog;
+Begin
+  Log.Print(logLine, logCons);
+End;
 
 Procedure TStartThread.Test;
 Begin

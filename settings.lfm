@@ -113,6 +113,24 @@ object Form_settings: TForm_settings
     OnClick = Button_cancelClick
     TabOrder = 8
   end
+  object CheckBox_gffConsole: TCheckBox
+    Left = 8
+    Height = 17
+    Top = 80
+    Width = 137
+    Caption = 'Show Launcher-Console'
+    Enabled = False
+    TabOrder = 9
+  end
+  object CheckBox_mcConsole: TCheckBox
+    Left = 8
+    Height = 17
+    Top = 112
+    Width = 140
+    Caption = 'Show Minecraft Console'
+    OnChange = CheckBox_mcConsoleChange
+    TabOrder = 10
+  end
   object OpenDialog: TOpenDialog
     DefaultExt = '.exe'
     left = 464
