@@ -10,7 +10,7 @@ Uses
 //Additional classes
 
 Type
-  MissingFileException = Class(Exception)
+  EMissingFileException = Class(Exception)
   End;
 
   ////////////////////////////////////////////////////////////////////////////////

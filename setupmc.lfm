@@ -1,12 +1,12 @@
 object Form_setupMC: TForm_setupMC
-  Left = 1730
-  Height = 97
-  Top = 482
+  Left = 1672
+  Height = 99
+  Top = 486
   Width = 320
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Setting up MC'
-  ClientHeight = 97
+  ClientHeight = 99
   ClientWidth = 320
   OnClose = FormClose
   OnCreate = FormCreate

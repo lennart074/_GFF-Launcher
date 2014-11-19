@@ -10,12 +10,15 @@ Uses
   { Loading } setupMC,
   { Online } authsystem,
   { Access WebSettings } startup,
-  { JSON }jsonUtils, jsonWork {,jsonparser,fpjson},
+  { JSON }jsonUtils, jsonWork, jsonparser, fpjson,
   { Errors }errorhandler,
   { INIFiles }IniFiles,
   { JPEG-Support }JPEGLib,
   { Setting }settings,
-  { StrUtils }strutils;
+  { StrUtils }strutils,
+  { Zip-Handling }Zipper, types,
+  { Utils }unit_appUtils
+  ;
 
 { DONE 100 -oL4YG -cProfiles : Adding Profiles }
 { TODO 50 -oL4YG -cProfiles : Editing Profiles }
@@ -26,6 +29,7 @@ Type
   { TForm_Profiles }
 
   TForm_Profiles = Class(TForm)
+    Button_crByUrl: TButton;
     Button_editProfile: TButton;
     Button_refresh: TButton;
     Button_delete: TButton;
@@ -34,6 +38,7 @@ Type
     Button_create: TButton;
     CheckBox_forgeReady: Tcheckbox;
     ComboBox_version: Tcombobox;
+    Edit_crByUrl: TEdit;
     Edit_profileName: TEdit;
     GroupBox_channel: Tgroupbox;
     Image_backGround_fav: TImage;
@@ -51,12 +56,14 @@ Type
     TabSheet_create: TTabSheet;
     TabSheet_profiles: TTabSheet;
     TabSheet_fav: TTabSheet;
+    Procedure Button_crbyurlclick(Sender: TObject);
     Procedure Button_refreshClick(Sender: TObject);
     Procedure Button_cancelclick(Sender: TObject);
     Procedure Button_createclick(Sender: TObject);
     Procedure Button_deleteclick(Sender: TObject);
     Procedure Button_okclick(Sender: TObject);
     Procedure CreateProfile();
+    Procedure Edit_crbyurlchange(Sender: TObject);
     Procedure FormClose(Sender: TObject; Var Closeaction: Tcloseaction);
     Procedure FormCreate(Sender: TObject);
     Procedure Listbox_favsdblclick(Sender: TObject);
@@ -72,6 +79,7 @@ Type
     Procedure RadioButton_snapshotChange(Sender: TObject);
     Procedure Radiobutton_releasechange(Sender: TObject);
     Procedure Tabsheet_profilesenter(Sender: TObject);
+    Procedure CreateByURL_Technic(URL: String);
   Private
     { private declarations }
     Favourites, betaVersions, alphaVersions, preAlphaVersions, Versions,
@@ -98,7 +106,7 @@ Var
   i, i1, i2, i3, i4, i5: Integer;
   sorted: Boolean;
 Begin
-  CreateNewP:=True;
+  CreateNewP := True;
   If Not Assigned(Form_Profiles) Then
   Begin
     Application.CreateForm(TForm_Profiles, Form_Profiles);
@@ -161,11 +169,18 @@ Begin
       i5 := i;
       sorted := False;
     End;
-    //preAlphaVersions.Sort;
-    //alphaVersions.Sort;
-    //betaVersions.Sort;
-    Versions.Sort;
-    //snapshots.Sort;
+    preAlphaVersions.CustomSort(@unit_appUtils.SortDown);
+    alphaVersions.CustomSort(@unit_appUtils.SortDown);
+    betaVersions.CustomSort(@unit_appUtils.SortDown);
+    Versions.CustomSort(@unit_appUtils.SortDown);
+    snapshots.CustomSort(@unit_appUtils.SortDown);
+
+    //preAlphaVersions.CustomSort(unit_appUtils.StringListSortDownwards());
+    //alphaVersions.CustomSort(unit_appUtils.StringListSortDownwards());
+    //betaVersions.CustomSort(unit_appUtils.StringListSortDownwards());
+    //Versions.CustomSort(unit_appUtils.StringListSortDownwards());
+    //snapshots.CustomSort(unit_appUtils.StringListSortDownwards());
+
     ComboBox_version.Items := Versions;
   Except
     on E: Exception Do
@@ -182,8 +197,21 @@ Begin
   Begin
     Form_Profiles.Show;
   End;
-  TabSheet_create.Visible := True;
+  TabSheet_create.TabVisible := True;
   PageControl_profiles.ActivePage := TabSheet_create;
+End;
+
+Procedure Tform_profiles.Edit_crbyurlchange(Sender: TObject);
+Begin
+  If (Length(Edit_crByUrl.Text) > 8) Then
+  Begin
+    Button_crByUrl.Enabled := True;
+  End
+  Else
+  Begin
+    Button_crByUrl.Enabled := False;
+
+  End;
 End;
 
 Procedure Tform_profiles.Button_createclick(Sender: TObject);
@@ -217,33 +245,70 @@ Begin
     ini.WriteString('Profile', 'creator', UsrObj.username);
     ini.WriteString('Profile', 'crDate', DateToStr(now));
     ini.WriteString('Profile', 'crTime', TimeToStr(now));
+    ini.WriteString('Profile','name',Edit_profileName.Text);
     ini.WriteBool('Profile', 'Forge-Ready', CheckBox_forgeReady.Checked);
+
     ini.WriteString('Minecraft', 'version', ComboBox_version.Items[
       ComboBox_version.ItemIndex]);
-    ini.WriteBool('Minecraft', 'mc-type', True);
+    ini.WriteString('Minecraft', 'mc-type', 'MC_Forge');
     FreeAndNil(ini);
-    if (CheckBox_forgeReady.Checked) then begin
-      AssignFile(f, UsrObj.GFFProfilePath + '/' + Edit_profileName.Text+'/launcher_profiles.json');
+    If (CheckBox_forgeReady.Checked) Then
+    Begin
+      AssignFile(f, UsrObj.GFFProfilePath + '/' +
+        Edit_profileName.Text + '/launcher_profiles.json');
       Rewrite(f);
       CloseFile(f);
-    end;
+    End;
 
-    CreateNewP:=False;
+    CreateNewP := False;
     PageControl_profiles.ActivePage := TabSheet_profiles;
-    TabSheet_create.Visible := False;
+    TabSheet_create.TabVisible := False;
     Button_refreshClick(TabSheet_create);
   End;
 End;
 
 Procedure Tform_profiles.Button_cancelclick(Sender: TObject);
 Begin
-  CreateNewP:=False;
-  Form_Profiles.Close;
+  TabSheet_create.TabVisible := False;
+  CreateNewP := False;
+  PageControl_profiles.ActivePage:=TabSheet_profiles;
 End;
 
 Procedure Tform_profiles.Button_refreshClick(Sender: TObject);
 Begin
   Tabsheet_profilesenter(Button_refresh);
+End;
+
+Procedure Tform_profiles.Button_crbyurlclick(Sender: TObject);
+Var
+  URL: String;
+Begin
+  GroupBox_channel.Enabled := False;
+  ComboBox_version.Enabled := False;
+  CheckBox_forgeReady.Checked := True;
+  CheckBox_forgeReady.Enabled := False;
+
+  Button_cancel.Enabled := False;
+  Button_create.Enabled := False;
+
+  URL := Edit_crByUrl.Text;
+  If (Length(URL) > 8) Then
+  Begin
+    If (Pos('technicpack.net/api/',URL) >= 1) Then
+    Begin
+      CreateByURL_Technic(URL);
+    End
+    Else
+    Begin
+      ShowMessage('Please enter a valid platform URL!');
+      GroupBox_channel.Enabled := True;
+      ComboBox_version.Enabled := True;
+      CheckBox_forgeReady.Checked := False;
+      CheckBox_forgeReady.Enabled := True;
+      Button_cancel.Enabled := True;
+      Button_create.Enabled := True;
+    End;
+  End;
 End;
 
 Procedure TForm_Profiles.FormClose(Sender: TObject; Var CloseAction: TCloseAction);
@@ -261,7 +326,7 @@ Begin
     MainSettings.INI.WriteString(UsrObj.username, 'Favourites', FavString);
   End;
 
-  TabSheet_create.Hide;
+  TabSheet_create.TabVisible := False;
   DeleteDirectory('GFFLauncher/temp', True);
   Form_launcher.Show;
 End;
@@ -269,8 +334,8 @@ End;
 Procedure TForm_Profiles.FormCreate(Sender: TObject);
 Begin
   { Load Profiles(X) | Send them to launcher(X) }
-  Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,
-    Form_launcher.ComboBox_selectProfile.Items);
+  {Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,
+    Form_launcher.ComboBox_selectProfile.Items);}
   Form_Profiles.ListProfiles(UsrObj.GFFProfilePath, ListBox_profiles.Items);
 
   PageControl_profiles.ActivePage := TabSheet_profiles;
@@ -389,7 +454,7 @@ Begin
       TempToList.Add(ExtractFileName(DirList[I]));
     End;
   End;
-  If (TempToList.Count <> ToList.Count) or (TempToList.Count=1 or 0) Then
+  If (TempToList.Count <> ToList.Count) Or (TempToList.Count = 1 Or 0) Then
   Begin
     ToList.Assign(TempToList);
   End;
@@ -465,6 +530,87 @@ End;
 Procedure Tform_profiles.Tabsheet_profilesenter(Sender: TObject);
 Begin
   Form_Profiles.ListProfiles(UsrObj.GFFProfilePath, ListBox_profiles.Items);
+End;
+
+//################################################################################################
+//################################################################################################
+//################################################################################################
+
+Procedure TForm_Profiles.CreateByURL_Technic(URL: String);
+Var
+  P: TJSONParser;
+  D: TJSONData;
+  tempList: TStringList;
+  tempFile, tempURL, profilePath, currStr: String;
+  INI: TIniFile;
+  Unzipper: TUnZipper;
+  f: TextFile;
+Begin
+  tempFile := 'GFFLauncher/temp/crProfile.json';
+  If (Not authsystem.GetFile(URL, tempFile)) Then
+  Begin
+    ShowMessage('Download not successfull! Please check your Syntax.');
+    Exit;
+  End
+  Else
+  Begin
+    Try
+      tempList := TStringList.Create;
+      tempList.LoadFromFile(tempFile);
+      currStr := tempList.Text;
+      P := TJSONParser.Create(currStr);
+      D := P.Parse;
+      profilePath := UsrObj.GFFProfilePath + '/' + TJSONObject(D).Get('displayName');
+      ForceDirectories(profilePath);
+
+      ini := TIniFile.Create(profilePath + '/profileIndex.ini');
+      ini.WriteString('Profile', 'creator', UsrObj.username);
+      ini.WriteString('Profile', 'crDate', DateToStr(now));
+      ini.WriteString('Profile', 'crTime', TimeToStr(now));
+      ini.WriteBool('Profile', 'Forge-Ready', CheckBox_forgeReady.Checked);
+      ini.WriteString('Minecraft', 'version', TJSONObject(D).Get('minecraft'));
+      ini.WriteString('Profile','ModPack-Version',TJSONObject(D).Get('version'));
+      ini.WriteString('Minecraft', 'mc-type', 'ModPack_Technic');
+      FreeAndNil(ini);
+      If (CheckBox_forgeReady.Checked) Then
+      Begin
+        AssignFile(f, profilePath + '/launcher_profiles.json');
+        Rewrite(f);
+        CloseFile(f);
+      End;
+
+      tempURL := StringReplace(TJSONObject(D).Get('url'), '\/', '/', [rfReplaceAll]);
+      If (Not authsystem.GetBinFile(tempURL, profilePath + '/resource.zip')) Then
+      Begin
+        ShowMessage('Cannot retreve: ' + tempURL + LineEnding + 'Cannot create Profile!');
+        FreeAndNil(P);
+        FreeAndNil(D);
+        FreeAndNil(tempList);
+        exit;
+      End;
+      Try
+        Unzipper := TUnZipper.Create;
+        Unzipper.FileName := profilePath + '/resource.zip';
+        Unzipper.OutputPath := profilePath + '/';
+        Unzipper.Examine;
+        Unzipper.UnZipAllFiles;
+      Finally
+        FreeAndNil(Unzipper);
+      End;
+
+      DeleteFile(tempFile);
+      FreeAndNil(P);
+      FreeAndNil(D);
+      FreeAndNil(tempList);
+    Except
+      on E: Exception Do
+      Begin
+        ShowMessage('Cannot create Profile:' + LineEnding + 'Class:' +
+          E.ClassName + LineEnding + 'MSG:' + E.Message);
+      End;
+    End;
+  End;
+
 End;
 
 End.

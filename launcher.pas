@@ -9,7 +9,7 @@ Uses
   StdCtrls, Menus, LCLType,
   { Main Unit } gfflauncher,
   { Settings } settings,
-  { Profiles } Profiles,
+  { Profiles } Profiles, profiles_BETA,
   { Web } authsystem;
 
 Type
@@ -17,7 +17,7 @@ Type
   { TForm_launcher }
 
   TForm_launcher = Class(TForm)
-      Button_delUser: Tbutton;
+    Button_delUser: TButton;
     Button_moreProfiles: TButton;
     Button_addProfile: TButton;
     Button_options: TButton;
@@ -30,7 +30,7 @@ Type
     Timer_syncProfiles: Ttimer;
     Timer_checkLogin: TTimer;
     Procedure Button_addprofileclick(Sender: TObject);
-    procedure Button_deluserclick(Sender: Tobject);
+    Procedure Button_deluserclick(Sender: TObject);
     Procedure Button_logoutClick(Sender: TObject);
     Procedure Button_moreprofilesclick(Sender: TObject);
     Procedure Button_optionsClick(Sender: TObject);
@@ -83,26 +83,33 @@ End;
 
 Procedure Tform_launcher.Button_addprofileclick(Sender: TObject);
 Begin
-  Form_launcher.Hide;
+  //Form_launcher.Hide;
   Form_Profiles.CreateProfile;
 End;
 
-procedure Tform_launcher.Button_deluserclick(Sender: Tobject);
-    var
+Procedure Tform_launcher.Button_deluserclick(Sender: TObject);
+Var
   Reply, BoxStyle: Integer;
-begin
-  with Application do begin
+Begin
+  With Application Do
+  Begin
     BoxStyle := MB_ICONQUESTION + MB_YESNO;
-    Reply := MessageBox('Are you sure to delete ALL references of this user ? (Everything will be lost!)', 'Warning!', BoxStyle);
-    if Reply = IDYES then begin
-      MessageBox('Erasing data! This may durate a moment...', 'Deleting',MB_ICONINFORMATION);
+    Reply := MessageBox(
+      'Are you sure to delete ALL references of this user ? (Everything will be lost!)',
+      'Warning!', BoxStyle);
+    If Reply = idYes Then
+    Begin
+      MessageBox('Erasing data! This may durate a moment...',
+        'Deleting', MB_ICONINFORMATION);
       MainSettings.INI.EraseSection(UsrObj.username);
-  DeleteDirectory(UsrObj.GFFProfilePath, False);
-  MessageBox('Erased all user Information, will return to login!', 'Finished',MB_ICONINFORMATION);
-  Button_logoutClick(Button_delUser);
-  end
-  else MessageBox('Good choise ;)', ';P', MB_ICONINFORMATION);
-  end;
+      DeleteDirectory(UsrObj.GFFProfilePath, False);
+      MessageBox('Erased all user Information, will return to login!',
+        'Finished', MB_ICONINFORMATION);
+      Button_logoutClick(Button_delUser);
+    End
+    Else
+      MessageBox('Good choise ;)', ';P', MB_ICONINFORMATION);
+  End;
 End;
 
 Procedure TForm_launcher.Button_optionsClick(Sender: TObject);
@@ -149,6 +156,7 @@ End;
 Procedure TForm_launcher.FormShow(Sender: TObject);
 Begin
   Label_username.Caption := UsrObj.username;
+  ProfileList.getNames(ComboBox_selectProfile.Items);
 End;
 
 Procedure TForm_launcher.Timer_checkLoginTimer(Sender: TObject);
@@ -170,11 +178,15 @@ End;
 
 Procedure Tform_launcher.Timer_syncProfilesTimer(Sender: TObject);
 Begin
-  Form_Profiles.ListProfiles(UsrObj.GFFProfilePath,
-    ComboBox_selectProfile.Items);
-  if (ComboBox_selectProfile.Items.Count<1) then begin
-    ComboBox_selectProfile.Text := '<Pls. Create A Profile>';
+  Timer_syncProfiles.Enabled := False;
+  if (Form_profilesBETA.CheckForProfileChanges(UsrObj.GFFProfilePath)) then begin
+  ProfileList.getNames(ComboBox_selectProfile.Items);
   end;
+  If (ComboBox_selectProfile.Items.Count < 1) Then
+  Begin
+    ComboBox_selectProfile.Text := '<Pls. Create A Profile>';
+  End;
+  Timer_syncProfiles.Enabled := True;
 End;
 
 End.

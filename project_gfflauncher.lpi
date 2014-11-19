@@ -15,7 +15,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="202"/>
+      <BuildNr Value="206"/>
       <StringTable Comments="Early-Access Version/Just to send something out" CompanyName="German Fast Forces" FileDescription="GFF-Launcher (Minecraft)" InternalName="GFF(/Galaxy?)-Launcher" LegalCopyright="To be edited" LegalTrademarks="To be edited" OriginalFilename="GFF-Launcher" ProductName="GFF-Launcher" ProductVersion="0.0.0.X"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -43,7 +43,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="15">
+    <Units Count="18">
       <Unit0>
         <Filename Value="project_gfflauncher.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -105,44 +105,62 @@
         <UnitName Value="objcollection"/>
       </Unit8>
       <Unit9>
-        <Filename Value="startthread.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="StartThread"/>
-      </Unit9>
-      <Unit10>
         <Filename Value="setupmc.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form_setupMC"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="setupMC"/>
-      </Unit10>
-      <Unit11>
+      </Unit9>
+      <Unit10>
         <Filename Value="profiles.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form_Profiles"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Profiles"/>
-      </Unit11>
-      <Unit12>
+      </Unit10>
+      <Unit11>
         <Filename Value="jsonwork.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jsonWork"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="consoles.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Form_consoles"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="consoles"/>
-      </Unit13>
-      <Unit14>
+      </Unit12>
+      <Unit13>
         <Filename Value="log.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Log"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="jsonUtils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jsonUtils"/>
       </Unit14>
+      <Unit15>
+        <Filename Value="startthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="StartThread"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="profiles_beta.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form_profilesBETA"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="profiles_BETA"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="dynamics.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Dynamics"/>
+      </Unit17>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

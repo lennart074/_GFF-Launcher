@@ -9,7 +9,9 @@ Uses
   StdCtrls, ExtCtrls, EditBtn, ValEdit, ComCtrls, Spin, IniPropStorage,
   BGRAFlashProgressBar,
 
-  { Main Unit } gfflauncher;
+  { Main Unit } gfflauncher,
+  { Startup_includes_paths } startup,
+  { Errors } errorhandler;
 
 Type
   { Main Program Settings }
@@ -45,7 +47,7 @@ Type
     Procedure Button_setMemClick(Sender: TObject);
     Procedure CheckBox_customJavaChange(Sender: TObject);
     Procedure CheckBox_customMemoryChange(Sender: TObject);
-    procedure Checkbox_mcconsolechange(Sender: Tobject);
+    procedure Checkbox_mcconsolechange(Sender: TObject);
     Procedure FormCreate(Sender: TObject);
     Procedure FormShow(Sender: TObject);
     Procedure SpinEdit_ramChange(Sender: TObject);
@@ -71,7 +73,8 @@ Procedure TForm_settings.FormCreate(Sender: TObject);
 Var
   DoWrite: Boolean;
 Begin
-  If (FileExists('GFFLauncher/settings/settings.ini') = False) Then
+  If (FileExists(PC_Settings.paths[PC_Settings.IndexOfName['MainSettings']].path) =
+    False) Then
   Begin
     DoWrite := True;
   End
@@ -80,11 +83,12 @@ Begin
     DoWrite := False;
   End;
 
-  MainSettings := TProgramSettings.Create('GFFLauncher/settings/settings.ini');
+  MainSettings := TProgramSettings.Create(
+    PC_Settings.paths[PC_Settings.IndexOfName['MainSettings']].path);
   If (DoWrite = True) Then
     MainSettings.WriteFile;
   MainSettings.ReadFile;
-End;
+end;
 
 Procedure TForm_settings.FormShow(Sender: TObject);
 Begin
@@ -116,7 +120,7 @@ Begin
   Button_setMem.Enabled := False;
   SpinEdit_ram.Value := MainSettings.Memory;
 
-  CheckBox_mcConsole.Checked := MainSettings.INI.ReadBool('Minecraft','showCons',False);
+  CheckBox_mcConsole.Checked := MainSettings.INI.ReadBool('Minecraft', 'showCons', False);
 End;
 
 Procedure TForm_settings.SpinEdit_ramChange(Sender: TObject);
@@ -160,6 +164,7 @@ Begin
   Else
   Begin
     CanClose := True;
+    MainSettings.ReadFile;
   End;
 
   If (CanClose = True) Then
@@ -209,9 +214,9 @@ Begin
   End;
 End;
 
-procedure Tform_settings.Checkbox_mcconsolechange(Sender: Tobject);
+procedure Tform_settings.Checkbox_mcconsolechange(Sender: TObject);
 begin
-    MainSettings.INI.WriteBool('Minecraft', 'showCons',CheckBox_mcConsole.Checked);
+  MainSettings.INI.WriteBool('Minecraft', 'showCons', CheckBox_mcConsole.Checked);
 End;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -224,8 +229,8 @@ Begin
   INI.WriteBool('GFFLauncher', 'getUpdates', False);
   INI.WriteBool('Minecraft', 'customMem', False);
   INI.WriteInteger('Minecraft', 'Memory', 1024);
-  INI.WriteBool('GFFLauncher','showCons',False);
-  INI.WriteBool('Minecraft','showCons',False);
+  INI.WriteBool('GFFLauncher', 'showCons', False);
+  INI.WriteBool('Minecraft', 'showCons', False);
 End;
 
 Procedure TProgramSettings.ReadFile;
@@ -234,9 +239,10 @@ Begin
   getUpdates := INI.ReadBool('GFFLauncher', 'getUpdates', True);
   customMem := INI.ReadBool('Minecraft', 'customMem', False);
   Memory := INI.ReadInteger('Minecraft', 'Memory', 1024);
-  BaseArgs := INI.ReadString('Minecraft','BaseArgs','-Djava.library.path=%appdata%\GFFLauncher\Binaries\LWJGL\windows\natives -cp %Libs% net.minecraft.client.main.Main');
-  showConsole:=INI.ReadBool('GFFLauncher','showCons',False);
-  showMCConsole:= INI.ReadBool('Minecraft','showCons',False);
+  BaseArgs := INI.ReadString('Minecraft', 'BaseArgs',
+    '-Djava.library.path=%appdata%\GFFLauncher\Binaries\LWJGL\windows\natives -cp %Libs% net.minecraft.client.main.Main');
+  showConsole := INI.ReadBool('GFFLauncher', 'showCons', False);
+  showMCConsole := INI.ReadBool('Minecraft', 'showCons', False);
 
 End;
 

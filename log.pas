@@ -12,6 +12,8 @@ uses
 { DONE 90 -oL4YG -cDebug : Create Log-Api/Output to console }
 
 procedure Print(msg: String; targetConsole : String = 'Main');
+procedure SwitchTo(targetConsole: String = 'Main');
+procedure ClearMC;
 
 const
   consoles_mc        : String = 'MC';
@@ -43,6 +45,11 @@ otherwise begin
                end;
           end;
 end;
+end;
+
+procedure ClearMC;
+begin
+Form_consoles.console_mc.Clear;
 end;
 
 end.

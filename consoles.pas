@@ -18,6 +18,7 @@ type
         PageControl_Consoles: Tpagecontrol;
         TabSheet_GFFLauncher: Ttabsheet;
         TabSheet_Minecraft: Ttabsheet;
+        procedure Formclosequery(Sender: Tobject; var Canclose: Boolean);
         procedure Formshow(Sender: Tobject);
     private
         { private declarations }
@@ -38,6 +39,11 @@ procedure Tform_consoles.Formshow(Sender: Tobject);
 begin
     console_main.Font.Color := clBlack;
     console_mc.Font.Color := clBlack;
+End;
+
+procedure Tform_consoles.Formclosequery(Sender: Tobject; var Canclose: Boolean);
+begin
+    Form_consoles.Hide;
 End;
 
 end.

@@ -9,10 +9,8 @@ Uses
   ExtCtrls,
   { Settings } settings,
   { Authsystem } authsystem,
-  { Launcher } launcher,
   { Objects } objcollection,
-  { Startup } startup,
-  { Profiles } Profiles;
+  { Startup } startup;
 
 Type
 
@@ -44,6 +42,9 @@ Implementation
 
 {$R *.lfm}
 
+Uses { Profiles } Profiles, profiles_BETA,
+  { Launcher } launcher;
+
 { TForm_login }
 
 Procedure TForm_login.FormCreate(Sender: TObject);
@@ -64,8 +65,8 @@ Procedure TForm_login.Button_loginClick(Sender: TObject);
 Var
   url, syntax: String;
 Begin
-  url := MainSettings.INI.ReadString('Authentication',
-    'url', 'https://authserver.mojang.com/authenticate');
+  url := MainSettings.INI.ReadString('Authentication', 'url',
+    'https://authserver.mojang.com/authenticate');
   syntax := startup.webSettings.INI.ReadString('Authentication',
     'SendSyntax',
     '{"agent":{"name": "Minecraft","version": 1},"username": "%username%","password": "%password%",}');
@@ -74,7 +75,13 @@ Begin
     syntax, url, authsystem.DIA_ALL) = True) Then
   Begin
     UsrObj.loginName := Edit_username.Text;
-    UsrObj.GFFProfilePath := 'GFFLauncher/Profiles/' + UsrObj.username;
+    UsrObj.GFFProfilePath := PC_CommonPaths.paths[PC_CommonPaths.IndexOfName['profiles']].path + '/' + UsrObj.username;
+
+    If Not Assigned(Form_ProfilesBETA) Then
+    Begin
+      Application.CreateForm(TForm_profilesBETA, Form_profilesBETA);
+    End;
+
     If Not Assigned(Form_launcher) Then
     Begin
       Application.CreateForm(TForm_launcher, Form_launcher);
@@ -83,6 +90,7 @@ Begin
     Begin
       Application.CreateForm(TForm_Profiles, Form_Profiles);
     End;
+
     Form_launcher.Timer_checkLogin.Enabled := True;
     Form_launcher.loggedIn := True;
     Form_launcher.Show;

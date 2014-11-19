@@ -1,36 +1,36 @@
 object Form_consoles: TForm_consoles
-  Left = 1714
-  Height = 385
-  Top = 106
-  Width = 513
-  BorderIcons = []
+  Left = 2067
+  Height = 400
+  Top = 210
+  Width = 657
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Form_consoles'
-  ClientHeight = 385
-  ClientWidth = 513
+  ClientHeight = 400
+  ClientWidth = 657
   Color = clBlack
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poDefault
   LCLVersion = '1.2.6.0'
   object PageControl_Consoles: TPageControl
     Left = 0
-    Height = 384
+    Height = 400
     Top = 0
-    Width = 512
-    ActivePage = TabSheet_Minecraft
-    ShowTabs = False
-    TabIndex = 1
+    Width = 656
+    ActivePage = TabSheet_GFFLauncher
+    TabIndex = 0
     TabOrder = 0
-    Options = [nboHidePageListPopup, nboKeyboardTabSwitch]
+    Options = [nboKeyboardTabSwitch]
     object TabSheet_GFFLauncher: TTabSheet
       Caption = 'Main'
-      ClientHeight = 376
-      ClientWidth = 504
+      ClientHeight = 374
+      ClientWidth = 648
       object console_main: TMemo
         Left = 0
-        Height = 360
+        Height = 376
         Top = 0
-        Width = 504
+        Width = 650
         Color = clSilver
         Font.Color = clBlack
         ParentFont = False
@@ -41,13 +41,13 @@ object Form_consoles: TForm_consoles
     end
     object TabSheet_Minecraft: TTabSheet
       Caption = 'Minecraft'
-      ClientHeight = 376
-      ClientWidth = 504
+      ClientHeight = 374
+      ClientWidth = 648
       object console_mc: TMemo
         Left = 0
         Height = 376
         Top = 0
-        Width = 504
+        Width = 648
         Color = clSilver
         Font.Color = clBlack
         ParentFont = False

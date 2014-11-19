@@ -1,8 +1,9 @@
 object Form_Profiles: TForm_Profiles
-  Left = 1774
+  Left = 1768
   Height = 309
-  Top = 253
+  Top = 284
   Width = 544
+  BorderStyle = bsSingle
   Caption = 'Form_Profiles'
   ClientHeight = 309
   ClientWidth = 544
@@ -183,6 +184,7 @@ object Form_Profiles: TForm_Profiles
         Width = 62
         Caption = 'Oldest first !'
         ParentColor = False
+        Visible = False
       end
       object Button_ok: TButton
         Left = 456
@@ -225,6 +227,25 @@ object Form_Profiles: TForm_Profiles
         Width = 124
         Caption = 'Forge-Ready (BETA!)'
         TabOrder = 5
+      end
+      object Edit_crByUrl: TEdit
+        Left = 0
+        Height = 21
+        Top = 192
+        Width = 312
+        Enabled = False
+        OnChange = Edit_crByUrlChange
+        TabOrder = 6
+      end
+      object Button_crByUrl: TButton
+        Left = 0
+        Height = 25
+        Top = 216
+        Width = 80
+        Caption = 'Create by URL'
+        Enabled = False
+        OnClick = Button_crByUrlClick
+        TabOrder = 7
       end
     end
   end

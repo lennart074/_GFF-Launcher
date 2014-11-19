@@ -11,6 +11,7 @@ object Form_login: TForm_login
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
+  ShowInTaskBar = stAlways
   LCLVersion = '1.2.6.0'
   object Image_back: TImage
     Left = 0

@@ -8,7 +8,8 @@ Uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
 
   { Main unit } gfflauncher,
-  { Objects }objcollection;
+  { Objects }objcollection,
+  { Dynamics }dynamics;
 
 Type
 
@@ -37,6 +38,7 @@ Type
 Var
   Form_startup: TForm_startup;
   WebSettings: TWebSettings;
+  PC_ParentalDirs, PC_ParentalFiles, PC_Settings, PC_CommonPaths: TPathCollection;
 
 Implementation
 
@@ -48,46 +50,79 @@ Uses settings, launcher, login, errorhandler;
 { TForm_startup }
 
 Procedure TForm_startup.FormShow(Sender: TObject);
+var
+  CurrentDir: String;
+  i: Integer;
+  tempStr : String;
 Begin
-  SetCurrentDir(SysUtils.GetEnvironmentVariable('appdata') + '\');
-  //Use AppData (<drive>:\Users\<user>\AppData\Roaming\)
+  try
+    tempStr := 'CurrentDir';
+    CurrentDir := Application.GetOptionValue('-GFFUseDir');
+    if ((Length(CurrentDir) <= 3) or (DirectoryExists(CurrentDir) = False)) then
+    begin
+      SetCurrentDir(SysUtils.GetEnvironmentVariable('appdata') + '\');
+    end
+    else
+    begin
+      SetCurrentDir(CurrentDir);
+    end;
+    //Use AppData (<drive>:\Users\<user>\AppData\Roaming\)
 
-  If (DirectoryExists('GFFLauncher/Binaries') = False) Or
-    (FileExists('GFFLauncher/settings/webSettings.ini') = False) Then
-  Begin
-    Raise MissingFileException.Create('Important files are missing! ' +
-      LineEnding + 'Please check your installation!');
-  End;
+    tempStr := 'ParentalDirs';
+    PC_ParentalDirs := TPathCollection.CreateByINISec(
+      'GFFLauncher/settings/paths.ini', 'ParentalDirs');
+    for i := 0 to (PC_ParentalDirs.Count - 1) do
+    begin
+      if not (DirectoryExists(PC_ParentalDirs.paths[i].path)) then
+      begin
+        CreateDir(PC_ParentalDirs.paths[i].path);
+      end;
+    end;
 
-  If (FileExists('GFFLauncher/Images/Loading/loading.png') = True) Then
-    Image_loading.Picture.LoadFromFile('GFFLauncher/Images/Loading/loading.png');
+    tempStr := 'ParentalFiles';
+    PC_ParentalFiles := TPathCollection.CreateByINISec(
+      'GFFLauncher/settings/paths.ini', 'PC_ParentalFiles');
+    for i := 0 to (PC_ParentalFiles.Count - 1) do
+    begin
+      if not (FileExists(PC_ParentalFiles.paths[i].path)) then
+      begin
+        raise (EMissingFileException.Create(
+          'File "' + PC_ParentalFiles.paths[i].Name + '" is marked as parental but missing!' +
+          LineEnding + 'Please check your installation and/or Path-Settings!' +
+          LineEnding + 'Path: ' + PC_ParentalFiles.paths[i].path));
+      end;
+    end;
 
-  If (FileExists('GFFLauncher/Images/Loading/back.png') = True) Then
-    Image_background.Picture.LoadFromFile('GFFLauncher/Images/Loading/back.png');
+    tempStr := 'CommonPaths';
+    PC_CommonPaths := TPathCollection.CreateByINISec('GFFLauncher/settings/paths.ini','CommonPaths');
 
-  If (DirectoryExists('GFFLauncher') = False) Then
-    CreateDir('GFFLauncher');
-  If (DirectoryExists('GFFLauncher/settings') = False) Then
-    CreateDir('GFFLauncher/settings');
-  If (DirectoryExists('GFFLauncher/Logs') = False) then
-    CreateDir('GFFLauncher/Logs');
-  if (DirectoryExists('GFFLauncher/temp')) then
-    CreateDir('GFFLauncher/temp');
+    tempStr := 'Settings';
+    PC_Settings:=TPathCollection.CreateByINISec('GFFLauncher/settings/paths.ini','Settings');
 
-  WebSettings := TWebSettings.Create('GFFLauncher/settings/webSettings.ini');
+    tempStr := 'Websettings';
+    WebSettings := TWebSettings.Create(PC_Settings.paths[PC_Settings.IndexOfName['webSettings']].path);
 
-  Application.CreateForm(TForm_settings, Form_settings);
-  Application.CreateForm(TForm_login, Form_login);
-  Timer_hideForm.Enabled := True;
-  StartupCompleted := True;
+
+    tempStr := 'Forms';
+    Application.CreateForm(TForm_settings, Form_settings);
+    Application.CreateForm(TForm_login, Form_login);
+    Timer_hideForm.Enabled := True;
+    StartupCompleted := True;
+  except
+    on E: Exception do
+    begin
+      Form_error.Handle(E, 'Fatal Startup Error ! Please check your installation!' +
+        LineEnding + 'Please contact the developer(s) if you think this shouldn' +
+        #39 + 't happen!' + LineEnding + 'Debug info: '+tempStr, True);
+    end;
+  end;
 End;
 
-Procedure Tform_startup.Formclose(Sender: TObject;
-  Var Closeaction: Tcloseaction);
+Procedure Tform_startup.Formclose(Sender: TObject; Var Closeaction: Tcloseaction);
 Begin
-  If Not (Pos('NoDEL', CloseOption)>0) Then
+  If Not (Pos('NoDEL', CloseOption) > 0) Then
   Begin
-    DeleteDirectory('GFFLauncher/temp', True);
+    DeleteDirectory(PC_ParentalDirs.paths[PC_ParentalDirs.IndexOfName['temp']].path, True);
   End;
 End;
 

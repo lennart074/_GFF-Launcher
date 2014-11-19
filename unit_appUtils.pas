@@ -22,6 +22,7 @@ function FindStringInList(list: TStringList; str: String): Integer;
 function DirectoryIsEmpty(Directory: string): boolean;
 function countString(str,char:String):Integer;
 function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
+function SortDown(List:TStringList; I1, I2:Integer):Integer;
 
 implementation
 
@@ -272,13 +273,19 @@ end;
 function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
 begin
   for Result := 0 to Strings.Count-1 do begin
-    if (Pos(SubStr, Strings[Result])>0) then begin
+    if (Pos(UpperCase(SubStr), UpperCase(Strings[Result]))>0) then begin
       Exit;
     end;
   end;
   Result := -1;
 end;
 //-----END-Source-----
+
+
+function SortDown(List:TStringList; I1, I2:Integer):Integer;
+begin
+  Result:=CompareStr(List.Strings[I2], List.Strings[I1]);
+end;
 
 function getSystemType(Binary: Boolean=False): Integer;
 var
