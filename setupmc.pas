@@ -10,8 +10,8 @@ Uses
   { Threads for setting up mc }StartThread,
   { INIFiles } IniFiles,
   { Utils } unit_appUtils,
-  { SelfExplaining} log
-  ;
+  { SelfExplaining} log;
+
 
 Type
 

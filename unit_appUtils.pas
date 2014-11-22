@@ -10,19 +10,19 @@ interface
 uses
   Classes, SysUtils, ShellApi, StrUtils, Process;
 
-function getSystemType(Binary: Boolean=False): Integer;
+function getSystemType(Binary: Boolean = False): Integer;
 function Like(const AString, APattern: string): boolean;
 procedure CopyDir(fromDir, toDir: string);
 procedure GetSubDirs(const directory: string; list: TStrings);
-function run(executable, attribs, PUseDir: string; NewGroup: boolean=False): boolean;
-function StrToBoolean(str: string; Strict:Boolean=False): boolean;
-function BoolToString(str: boolean; Strict:Boolean=False): string;
+function run(executable, attribs, PUseDir: string; NewGroup: boolean = False): boolean;
+function StrToBoolean(str: string; Strict: Boolean = False): boolean;
+function BoolToString(str: boolean; Strict: Boolean = False): string;
 function MemoryStreamToString(M: TMemoryStream): string;
 function FindStringInList(list: TStringList; str: String): Integer;
 function DirectoryIsEmpty(Directory: string): boolean;
-function countString(str,char:String):Integer;
+function countString(str, char: String): Integer;
 function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
-function SortDown(List:TStringList; I1, I2:Integer):Integer;
+function SortDown(List: TStringList; I1, I2: Integer): Integer;
 
 implementation
 
@@ -151,7 +151,7 @@ end;
 //==============================================================================
 //==============================================================================
 
-function run(executable, attribs, PUseDir: string; NewGroup: boolean=False): boolean;
+function run(executable, attribs, PUseDir: string; NewGroup: boolean = False): boolean;
 var
   AProcess: TProcess;
 begin
@@ -189,34 +189,39 @@ end;
 
 function FindStringInList(list: TStringList; str: String): Integer;
 var
-  I, Found:Integer;
+  I, Found: Integer;
 begin
-  i:=0;
+  i := 0;
   repeat
-    Found:=(Pos(str, list[i]));
+    Found := (Pos(str, list[i]));
     Inc(i);
-  until (Found>=1) or (i=list.count);
-  if (Found>=1) then begin
-    Result:=Found;
-  end else begin
-    Result:=-1;
+  until (Found >= 1) or (i = list.Count);
+  if (Found >= 1) then
+  begin
+    Result := Found;
+  end
+  else
+  begin
+    Result := -1;
   end;
 end;
 
 procedure GetSubDirs(const directory: string; list: TStrings);
 var
-  sr : TSearchRec;
+  sr: TSearchRec;
 begin
   try
-    if FindFirst(IncludeTrailingPathDelimiter(directory) + '*.*', faDirectory, sr) < 0 then
+    if FindFirst(IncludeTrailingPathDelimiter(directory) + '*.*',
+      faDirectory, sr) < 0 then
       Exit
     else
-    repeat
-      if ((sr.Attr and faDirectory <> 0) AND (sr.Name <> '.') AND (sr.Name <> '..')) then
-        List.Add({IncludeTrailingPathDelimiter(directory) +} sr.Name) ;
-    until FindNext(sr) <> 0;
+      repeat
+        if ((sr.Attr and faDirectory <> 0) AND (sr.Name <> '.') AND
+          (sr.Name <> '..')) then
+          List.Add({IncludeTrailingPathDelimiter(directory) +} sr.Name);
+      until FindNext(sr) <> 0;
   finally
-    SysUtils.FindClose(sr) ;
+    SysUtils.FindClose(sr);
   end;
 end;
 
@@ -239,26 +244,29 @@ begin
   SHFileOperation(OpStruct);
 end;
 
-function StrToBoolean(str: string; Strict:Boolean=False): boolean;
+function StrToBoolean(str: string; Strict: Boolean = False): boolean;
 var
   Res: boolean;
 begin
-  if (Strict=True) then begin
-  if str = 'false' then
-    Res := False;
-  if str = 'true' then
-    Res := True;
-  Result := Res;
-  end else begin
-    if (Pos('false',str)>0) or (Pos('False',str)>0) then
+  if (Strict = True) then
+  begin
+    if str = 'false' then
       Res := False;
-    if (Pos('true',str)>0) or (Pos('True',str)>0) then
+    if str = 'true' then
+      Res := True;
+    Result := Res;
+  end
+  else
+  begin
+    if (Pos('false', str) > 0) or (Pos('False', str) > 0) then
+      Res := False;
+    if (Pos('true', str) > 0) or (Pos('True', str) > 0) then
       Res := True;
     Result := Res;
   end;
 end;
 
-function BoolToString(str: boolean; Strict:Boolean=False): string;
+function BoolToString(str: boolean; Strict: Boolean = False): string;
 var
   Res: string;
 begin
@@ -272,8 +280,10 @@ end;
 //-----BEGIN-Source:https://stackoverflow.com/questions/6341449/tstringlist-indexof-wildcard-within-indexof-----
 function FindMatchStr(Strings: TStringList; const SubStr: string): Integer;
 begin
-  for Result := 0 to Strings.Count-1 do begin
-    if (Pos(UpperCase(SubStr), UpperCase(Strings[Result]))>0) then begin
+  for Result := 0 to Strings.Count - 1 do
+  begin
+    if (Pos(UpperCase(SubStr), UpperCase(Strings[Result])) > 0) then
+    begin
       Exit;
     end;
   end;
@@ -282,38 +292,45 @@ end;
 //-----END-Source-----
 
 
-function SortDown(List:TStringList; I1, I2:Integer):Integer;
+function SortDown(List: TStringList; I1, I2: Integer): Integer;
 begin
-  Result:=CompareStr(List.Strings[I2], List.Strings[I1]);
+  Result := CompareStr(List.Strings[I2], List.Strings[I1]);
 end;
 
-function getSystemType(Binary: Boolean=False): Integer;
+function getSystemType(Binary: Boolean = False): Integer;
 var
   windir: String;
 begin
-  windir:=SysUtils.GetEnvironmentVariable('windir');
-  if DirectoryExists(windir+'\SysWOW64') and DirectoryExists(ExtractFileDrive(windir)+'\Program Files (x86)') then begin
-    Result:=64;
-  end else begin
-    if Binary=True then begin
-    Result:=86;
-    end else begin
-    Result:=32;
+  windir := SysUtils.GetEnvironmentVariable('windir');
+  if DirectoryExists(windir + '\SysWOW64') and
+    DirectoryExists(ExtractFileDrive(windir) + '\Program Files (x86)') then
+  begin
+    Result := 64;
+  end
+  else
+  begin
+    if Binary = True then
+    begin
+      Result := 86;
+    end
+    else
+    begin
+      Result := 32;
     end;
   end;
 end;
 
-function countString(str,char:String):Integer;
-var i: Integer;
+function countString(str, char: String): Integer;
+var
+  i: Integer;
 begin
- Result:= 0;
- i:= Length(Str);
- for i:= 1 to i do
+  Result := 0;
+  i := Length(Str);
+  for i := 1 to i do
   begin
-   if Str[i] = char then inc(Result);
+    if Str[i] = char then
+      Inc(Result);
   end;
- end;
+end;
 
 end.
-
-

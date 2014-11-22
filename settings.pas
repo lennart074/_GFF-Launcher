@@ -120,7 +120,8 @@ Begin
   Button_setMem.Enabled := False;
   SpinEdit_ram.Value := MainSettings.Memory;
 
-  CheckBox_mcConsole.Checked := MainSettings.INI.ReadBool('Minecraft', 'showCons', False);
+  CheckBox_mcConsole.Checked :=
+    MainSettings.INI.ReadBool('Minecraft', 'showCons', False);
 End;
 
 Procedure TForm_settings.SpinEdit_ramChange(Sender: TObject);

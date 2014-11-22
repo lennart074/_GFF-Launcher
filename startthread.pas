@@ -12,8 +12,7 @@ Uses
   { JSON-Units } jsonUtils, fpjson, jsonparser,
   { Utils } unit_appUtils, FileUtil,
   { Log/Consoles }Log,
-  { Zipper } zipper
-  ;
+  { Zipper } zipper;
 
 Type
   TStartThread = Class(TThread)
@@ -93,7 +92,7 @@ Begin
 
     {If (profileSettings.ReadString('Minecraft', 'mc-type', 'MC_Forge') = 'MC_Forge') Then
     Begin}
-      GetInformation_type_MC_Forge();
+    GetInformation_type_MC_Forge();
     {End;
     If (profileSettings.ReadString('Minecraft', 'mc-type', 'MC_Forge') =
       'ModPack_Technic') Then
@@ -112,7 +111,7 @@ Begin
     {If (profileSettings.ReadString('Minecraft', 'mc-type', 'MC_Forge') =
       'MC_Forge') Then
     Begin}
-      StartMC_type_MC_Forge();
+    StartMC_type_MC_Forge();
     {End;
     If (profileSettings.ReadString('Minecraft', 'mc-type', 'MC_Forge') =
       'ModPack_Technic') Then
@@ -1098,9 +1097,11 @@ Begin
     CurrentAction := 'Searching Libs...';
     Synchronize(@ShowStatus);
 
-    LibList := FindAllFiles(GetCurrentDir+'/'+ProfilePath+'/libraries');
-    for I:=0 to LibList.Count-1 do begin
-      LibList[i]:=StringReplace(LibList[i],GetCurrentDir+'/'+ProfilePath,'',[rfReplaceAll]);
+    LibList := FindAllFiles(GetCurrentDir + '/' + ProfilePath + '/libraries');
+    for I := 0 to LibList.Count - 1 do
+    begin
+      LibList[i] := StringReplace(LibList[i], GetCurrentDir + '/' +
+        ProfilePath, '', [rfReplaceAll]);
     end;
 
     P := TJSONParser.Create(content.Text);
@@ -1198,8 +1199,8 @@ Begin
       logLine := StreamToString(mcProc.Output);
       //If Length(LogLine) > 1 Then
       //Begin
-        logCons := Log.Consoles_MC;
-        Synchronize(@PrintLog);
+      logCons := Log.Consoles_MC;
+      Synchronize(@PrintLog);
       //End;
       Sleep(100);
     End;

@@ -77,10 +77,12 @@ begin
     // try reading it
     NumBytes := Stream.Read((MemStream.Memory + BytesRead)^, READ_BYTES);
     if NumBytes > 0 // All read() calls will block, except the final one.
-    then begin
+    then
+    begin
       Inc(BytesRead, NumBytes);
-    end else
-      BREAK // Program has finished execution.
+    end
+    else
+      BREAK; // Program has finished execution.
   end;
 
   MemStream.SetSize(BytesRead);
@@ -90,12 +92,12 @@ begin
 
   for NumBytes := 0 to OutputLines.Count - 1 do
   begin
-    Result:=Result+LineEnding+OutputLines[NumBytes];
+    Result := Result + LineEnding + OutputLines[NumBytes];
   end;
 
   OutputLines.Free;
   MemStream.Free;
-//-----END-Source-----
+  //-----END-Source-----
 end;
 
 Function MemoryStreamToString(M: TMemoryStream): Ansistring;
@@ -154,19 +156,19 @@ Begin
   RespStream.Free;
   If Length(Resp) > 5 Then
   Begin
-    PString:=Resp;
+    PString := Resp;
     P := TJSONParser.Create(PString);
     Try
       Names := TStringList.Create;
       Items := TStringList.Create;
-      parse:=1;
+      parse := 1;
       D := P.Parse;
       jsonUtils.ListNames(D, Names);
       jsonUtils.ListItems(D, Items);
       errorIndex := Names.IndexOf('errorMessage');
       If ((errorIndex >= 0) And (arg <> DIA_DEN)) Then
       Begin
-        ShowMessage('Error occured!'+ LineEnding +'MSG:'+ Items[errorIndex]);
+        ShowMessage('Error occured!' + LineEnding + 'MSG:' + Items[errorIndex]);
         Result := False;
       End
       Else
@@ -182,11 +184,12 @@ Begin
         D.Free;
 
         //Prevent '"legacy":True' - Bug!
-        items[tempIndex]:=StringReplace(items[tempIndex],'True','"True"',[rfReplaceAll]);
+        items[tempIndex] := StringReplace(items[tempIndex], 'True',
+          '"True"', [rfReplaceAll]);
 
-        PString:=items[tempIndex];
+        PString := items[tempIndex];
         P := TJSONParser.Create(PString);
-        Parse:=2;
+        Parse := 2;
         D := P.Parse;
         Begin
           jsonUtils.ListNames(D, Names);
@@ -204,7 +207,9 @@ Begin
           Begin
             UsrObj.isLegacy := StrToBoolean(items[tempIndex]);
             UsrObj.userType := 'legacy';
-          End else begin
+          End
+          else
+          begin
             UsrObj.isLegacy := False;
             UsrObj.userType := 'mojang';
           end;
@@ -225,7 +230,8 @@ Begin
       on E: Exception Do
       Begin
         Result := False;
-        Form_error.Handle(E, 'JSONParsing failed at string:' + LineEnding + PString + LineEnding + 'Parse:'+IntToStr(parse));
+        Form_error.Handle(E, 'JSONParsing failed at string:' + LineEnding +
+          PString + LineEnding + 'Parse:' + IntToStr(parse));
       End;
     End;
   End;

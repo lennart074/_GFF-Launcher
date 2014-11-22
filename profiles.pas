@@ -17,8 +17,7 @@ Uses
   { Setting }settings,
   { StrUtils }strutils,
   { Zip-Handling }Zipper, types,
-  { Utils }unit_appUtils
-  ;
+  { Utils }unit_appUtils;
 
 { DONE 100 -oL4YG -cProfiles : Adding Profiles }
 { TODO 50 -oL4YG -cProfiles : Editing Profiles }
@@ -245,7 +244,7 @@ Begin
     ini.WriteString('Profile', 'creator', UsrObj.username);
     ini.WriteString('Profile', 'crDate', DateToStr(now));
     ini.WriteString('Profile', 'crTime', TimeToStr(now));
-    ini.WriteString('Profile','name',Edit_profileName.Text);
+    ini.WriteString('Profile', 'name', Edit_profileName.Text);
     ini.WriteBool('Profile', 'Forge-Ready', CheckBox_forgeReady.Checked);
 
     ini.WriteString('Minecraft', 'version', ComboBox_version.Items[
@@ -254,8 +253,8 @@ Begin
     FreeAndNil(ini);
     If (CheckBox_forgeReady.Checked) Then
     Begin
-      AssignFile(f, UsrObj.GFFProfilePath + '/' +
-        Edit_profileName.Text + '/launcher_profiles.json');
+      AssignFile(f, UsrObj.GFFProfilePath + '/' + Edit_profileName.Text +
+        '/launcher_profiles.json');
       Rewrite(f);
       CloseFile(f);
     End;
@@ -271,7 +270,7 @@ Procedure Tform_profiles.Button_cancelclick(Sender: TObject);
 Begin
   TabSheet_create.TabVisible := False;
   CreateNewP := False;
-  PageControl_profiles.ActivePage:=TabSheet_profiles;
+  PageControl_profiles.ActivePage := TabSheet_profiles;
 End;
 
 Procedure Tform_profiles.Button_refreshClick(Sender: TObject);
@@ -294,7 +293,7 @@ Begin
   URL := Edit_crByUrl.Text;
   If (Length(URL) > 8) Then
   Begin
-    If (Pos('technicpack.net/api/',URL) >= 1) Then
+    If (Pos('technicpack.net/api/', URL) >= 1) Then
     Begin
       CreateByURL_Technic(URL);
     End
@@ -569,7 +568,7 @@ Begin
       ini.WriteString('Profile', 'crTime', TimeToStr(now));
       ini.WriteBool('Profile', 'Forge-Ready', CheckBox_forgeReady.Checked);
       ini.WriteString('Minecraft', 'version', TJSONObject(D).Get('minecraft'));
-      ini.WriteString('Profile','ModPack-Version',TJSONObject(D).Get('version'));
+      ini.WriteString('Profile', 'ModPack-Version', TJSONObject(D).Get('version'));
       ini.WriteString('Minecraft', 'mc-type', 'ModPack_Technic');
       FreeAndNil(ini);
       If (CheckBox_forgeReady.Checked) Then
@@ -582,7 +581,8 @@ Begin
       tempURL := StringReplace(TJSONObject(D).Get('url'), '\/', '/', [rfReplaceAll]);
       If (Not authsystem.GetBinFile(tempURL, profilePath + '/resource.zip')) Then
       Begin
-        ShowMessage('Cannot retreve: ' + tempURL + LineEnding + 'Cannot create Profile!');
+        ShowMessage('Cannot retreve: ' + tempURL + LineEnding +
+          'Cannot create Profile!');
         FreeAndNil(P);
         FreeAndNil(D);
         FreeAndNil(tempList);

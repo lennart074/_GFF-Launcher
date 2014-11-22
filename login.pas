@@ -59,6 +59,7 @@ Begin
   Begin
     FreeAndNil(Form_launcher);
   End;
+  Form_startup.ReloadDynamics;
 End;
 
 Procedure TForm_login.Button_loginClick(Sender: TObject);
@@ -90,7 +91,6 @@ Begin
     Begin
       Application.CreateForm(TForm_Profiles, Form_Profiles);
     End;
-
     Form_launcher.Timer_checkLogin.Enabled := True;
     Form_launcher.loggedIn := True;
     Form_launcher.Show;

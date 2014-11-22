@@ -5,29 +5,29 @@ unit consoles;
 interface
 
 uses
-    Classes, Sysutils, Fileutil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-    ComCtrls;
+  Classes, SysUtils, Fileutil, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ComCtrls;
 
 type
 
-    { TForm_consoles }
+  { TForm_consoles }
 
-    TForm_consoles = class(Tform)
-        console_main: Tmemo;
-        console_mc: Tmemo;
-        PageControl_Consoles: Tpagecontrol;
-        TabSheet_GFFLauncher: Ttabsheet;
-        TabSheet_Minecraft: Ttabsheet;
-        procedure Formclosequery(Sender: Tobject; var Canclose: Boolean);
-        procedure Formshow(Sender: Tobject);
-    private
-        { private declarations }
-    public
-        { public declarations }
-    end;
+  TForm_consoles = class(TForm)
+    console_main: Tmemo;
+    console_mc: Tmemo;
+    PageControl_Consoles: TPageControl;
+    TabSheet_GFFLauncher: TTabSheet;
+    TabSheet_Minecraft: TTabSheet;
+    procedure Formclosequery(Sender: TObject; var Canclose: Boolean);
+    procedure Formshow(Sender: TObject);
+  private
+    { private declarations }
+  public
+    { public declarations }
+  end;
 
 var
-    Form_consoles: TForm_consoles;
+  Form_consoles: TForm_consoles;
 
 implementation
 
@@ -35,15 +35,15 @@ implementation
 
 { TForm_consoles }
 
-procedure Tform_consoles.Formshow(Sender: Tobject);
+procedure Tform_consoles.Formshow(Sender: TObject);
 begin
-    console_main.Font.Color := clBlack;
-    console_mc.Font.Color := clBlack;
+  console_main.Font.Color := clBlack;
+  console_mc.Font.Color := clBlack;
 End;
 
-procedure Tform_consoles.Formclosequery(Sender: Tobject; var Canclose: Boolean);
+procedure Tform_consoles.Formclosequery(Sender: TObject; var Canclose: Boolean);
 begin
-    Form_consoles.Hide;
+  Form_consoles.Hide;
 End;
 
 end.

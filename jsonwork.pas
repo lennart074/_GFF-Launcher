@@ -53,7 +53,7 @@ Begin
       jsonUtils.ListNames(D, names);
       jsonUtils.ListItems(D, Items);
 
-      OutList.Add(StringReplace(Items[names.IndexOf('id')],'"','',[rfReplaceAll]));
+      OutList.Add(StringReplace(Items[names.IndexOf('id')], '"', '', [rfReplaceAll]));
     End;
 
   Except
@@ -62,11 +62,11 @@ Begin
       Form_error.Handle(E, str, False);
     End;
   End;
-      FreeAndNil(names);
-    FreeAndNil(P);
-    FreeAndNil(D);
-    FreeAndNil(items);
-    FreeAndNil(Content);
+  FreeAndNil(names);
+  FreeAndNil(P);
+  FreeAndNil(D);
+  FreeAndNil(items);
+  FreeAndNil(Content);
 End;
 
 End.

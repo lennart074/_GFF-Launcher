@@ -8,8 +8,8 @@ Uses
   Classes, SysUtils, StrUtils, fpjson, jsonparser;
 
 Function JSONToString(J: TJSonData): String;
-Procedure ArrayToList(J: TJSONData; ToList: TStringList;Advanced: Boolean = False);
-Procedure ListStringToList(str: String; ToList:TStringList);
+Procedure ArrayToList(J: TJSONData; ToList: TStringList; Advanced: Boolean = False);
+Procedure ListStringToList(str: String; ToList: TStringList);
 Function getValue(Const pair: String; Const name0value1: Integer = 1): String;
 Procedure ListNames(Data: TJSONData; GoalList: TStringList);
 Procedure ListItems(Data: TJSONData; GoalList: TStringList);
@@ -64,7 +64,7 @@ Begin
   Result := Res;
 End;
 
-Procedure ArrayToList(J: TJSONData; ToList:TStringList; Advanced: Boolean = False);
+Procedure ArrayToList(J: TJSONData; ToList: TStringList; Advanced: Boolean = False);
 Var
   //Res: TStringList;
   sPos, I: Integer;
@@ -133,7 +133,7 @@ Begin
 
 End;
 
-Procedure ListStringToList(str: String; ToList:TStringList);
+Procedure ListStringToList(str: String; ToList: TStringList);
 Begin
   ToList.Clear;
   ToList.Delimiter := ',';

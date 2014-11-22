@@ -8,16 +8,19 @@ Uses
   Classes, SysUtils, FileUtil,
   { INIFiles }IniFiles,
   { Debug } Dialogs,
-  { TObjectList } contnrs
-  ;
+  { TObjectList } contnrs;
 
 Type
+
+  { TUserObject }
 
   TUserObject = Class(TObject)
     username, loginName, UUID, profileID, accessToken, GFFProfilePath,
     userType, userProps: String;
     isOffline, isLegacy: Boolean;
   End;
+
+  { TProfileObj }
 
   TProfileObj = Class(TObject)
   public
@@ -41,12 +44,14 @@ Type
     Property minLauncherVer: Integer read pMinLauncherVer;
   End;
 
-    TProfileList = class(TObjectList)
+  { TProfileList }
+
+  TProfileList = class(TObjectList)
   private
-    function GetObject(I:Integer):TProfileObj;
-    procedure SetObject(I:Integer; Obj:TProfileObj);
+    function GetObject(I: Integer): TProfileObj;
+    procedure SetObject(I: Integer; Obj: TProfileObj);
   public
-    property objects[I:Integer]: TProfileObj read GetObject write SetObject;
+    property objects[I: Integer]: TProfileObj read GetObject write SetObject;
   end;
 
   { TProfileCollection }
@@ -56,11 +61,12 @@ Type
     Procedure Clear;
     Procedure Add(ProfObj: TProfileObj);
     Function IndexOf(str: String): Integer;
-    Procedure getNames(ToList:TStrings);
+    Procedure getNames(ToList: TStrings);
     Function getNameByIndex(Index: Integer): String;
     Function GetCount: Integer;
     Function GetObject(Index: Integer): TProfileObj;
-    Function CollectionIsDifferent(OtherCollection :TProfileCollection):Boolean;
+    Function CollectionIsDifferent(OtherCollection: TProfileCollection;
+      CompareCounts: Boolean = True): Boolean;
     Constructor Create;
     Destructor Destroy;
   Private
@@ -123,14 +129,14 @@ End;
 //################################################################################################
 //################################################################################################
 
-function TProfileList.GetObject(I:Integer):TProfileObj;
+function TProfileList.GetObject(I: Integer): TProfileObj;
 begin
   Result := TProfileObj(Items[I]);
 end;
 
-procedure TProfileList.SetObject(I:Integer; Obj:TProfileObj);
+procedure TProfileList.SetObject(I: Integer; Obj: TProfileObj);
 begin
-  Items[I]:=Obj;
+  Items[I] := Obj;
 end;
 
 //################################################################################################
@@ -153,7 +159,7 @@ Function TProfileCollection.IndexOf(str: String): Integer;
 Var
   I: Integer;
 Begin
-  For I:=0 To (pProfiles.Count-1) Do
+  For I := 0 To (pProfiles.Count - 1) Do
   Begin
     If (pProfiles.objects[i].ProfName = str) Then
     Begin
@@ -170,7 +176,7 @@ Var
   NameStr: String;
 Begin
   ToList.Clear;
-  For I:=0 To (pProfiles.Count-1) Do
+  For I := 0 To (pProfiles.Count - 1) Do
   Begin
     NameStr := pProfiles.objects[i].ProfName;
     ToList.Add(NameStr);
@@ -189,29 +195,42 @@ End;
 
 Function TProfileCollection.GetObject(Index: Integer): TProfileObj;
 begin
-  Result:=pProfiles.objects[Index];
+  Result := pProfiles.objects[Index];
 end;
 
-Function TProfileCollection.CollectionIsDifferent(OtherCollection: TProfileCollection): Boolean;
+Function TProfileCollection.CollectionIsDifferent(OtherCollection: TProfileCollection;
+  CompareCounts: Boolean): Boolean;
 var
-  I:Integer;
+  I: Integer;
 begin
-    if (Count<>OtherCollection.Count) then begin
-      Result:=True;
-    end else begin
-      for I:=0 to (Count-1) do begin
-          if (pProfiles.objects[I].ProfName<>OtherCollection.profiles[I].ProfName) then begin
-            Result:=True;
-            Exit;
-          end;
+  if ((Count <> OtherCollection.Count) and (CompareCounts = True)) then
+  begin
+    Result := True;
+  end
+  else
+  begin
+    if not OtherCollection.Count = 0 then
+    begin
+      for I := 0 to (Count - 1) do
+      begin
+        if (pProfiles.objects[I].ProfName <> OtherCollection.profiles[I].ProfName) then
+        begin
+          Result := True;
+          Exit;
+        end;
       end;
+    end
+    else
+    begin
+      Result := True;
     end;
-    Result:=False;
+  end;
+  Result := False;
 end;
 
 Constructor TProfileCollection.Create;
 Begin
-  pProfiles:=TProfileList.create(True);
+  pProfiles := TProfileList.Create(True);
   Inherited Create;
 End;
 

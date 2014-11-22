@@ -83,8 +83,7 @@ End;
 
 Procedure Tform_launcher.Button_addprofileclick(Sender: TObject);
 Begin
-  //Form_launcher.Hide;
-  Form_Profiles.CreateProfile;
+  Form_ProfilesBETA.CreateProfile();
 End;
 
 Procedure Tform_launcher.Button_deluserclick(Sender: TObject);
@@ -179,8 +178,9 @@ End;
 Procedure Tform_launcher.Timer_syncProfilesTimer(Sender: TObject);
 Begin
   Timer_syncProfiles.Enabled := False;
-  if (Form_profilesBETA.CheckForProfileChanges(UsrObj.GFFProfilePath)) then begin
-  ProfileList.getNames(ComboBox_selectProfile.Items);
+  if (Form_profilesBETA.CheckForProfileChanges(UsrObj.GFFProfilePath)) then
+  begin
+    ProfileList.getNames(ComboBox_selectProfile.Items);
   end;
   If (ComboBox_selectProfile.Items.Count < 1) Then
   Begin

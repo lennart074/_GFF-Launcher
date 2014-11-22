@@ -25,6 +25,7 @@ Type
     Image_loading: TImage;
     Timer_hideForm: TTimer;
     Procedure Formclose(Sender: TObject; Var Closeaction: Tcloseaction);
+    Procedure ReloadDynamics;
     Procedure FormShow(Sender: TObject);
     Procedure Timer_hideFormTimer(Sender: TObject);
   Private
@@ -33,17 +34,19 @@ Type
   Public
     { public declarations }
     CloseOption: String;
+    tempStr: String;
   End;
 
 Var
   Form_startup: TForm_startup;
   WebSettings: TWebSettings;
-  PC_ParentalDirs, PC_ParentalFiles, PC_Settings, PC_CommonPaths: TPathCollection;
+  PC_ParentalDirs, PC_ParentalFiles, PC_Settings, PC_CommonPaths,
+  PC_Images: TPathCollection;
 
 Implementation
 
 Uses settings, launcher, login, errorhandler;
-//Statements positioned like those are to avoid circular unit references!
+//Statements positioned here to avoid circular unit references!
 
 {$R *.lfm}
 
@@ -53,7 +56,6 @@ Procedure TForm_startup.FormShow(Sender: TObject);
 var
   CurrentDir: String;
   i: Integer;
-  tempStr : String;
 Begin
   try
     tempStr := 'CurrentDir';
@@ -67,7 +69,38 @@ Begin
       SetCurrentDir(CurrentDir);
     end;
     //Use AppData (<drive>:\Users\<user>\AppData\Roaming\)
+    //if not specified otherwise
 
+    ReloadDynamics;
+
+    tempStr := 'Forms';
+    Application.CreateForm(TForm_settings, Form_settings);
+    Application.CreateForm(TForm_login, Form_login);
+    Timer_hideForm.Enabled := True;
+    StartupCompleted := True;
+  except
+    on E: Exception do
+    begin
+      Form_error.Handle(E, 'Fatal Startup Error ! Please check your installation!' +
+        LineEnding + 'Please contact the developer(s) if you think this shouldn' +
+        #39 + 't happen!' + LineEnding + 'Debug info: ' + tempStr, True);
+    end;
+  end;
+End;
+
+Procedure TForm_startup.Formclose(Sender: TObject; Var Closeaction: Tcloseaction);
+Begin
+  If Not (Pos('NoDEL', CloseOption) > 0) Then
+  Begin
+    DeleteDirectory(PC_ParentalDirs.paths[PC_ParentalDirs.IndexOfName['temp']].path, True);
+  End;
+End;
+
+Procedure TForm_startup.ReloadDynamics;
+var
+  I: Integer;
+begin
+  try
     tempStr := 'ParentalDirs';
     PC_ParentalDirs := TPathCollection.CreateByINISec(
       'GFFLauncher/settings/paths.ini', 'ParentalDirs');
@@ -86,45 +119,38 @@ Begin
     begin
       if not (FileExists(PC_ParentalFiles.paths[i].path)) then
       begin
-        raise (EMissingFileException.Create(
-          'File "' + PC_ParentalFiles.paths[i].Name + '" is marked as parental but missing!' +
+        raise (EMissingFileException.Create('File "' +
+          PC_ParentalFiles.paths[i].Name + '" is marked as parental but missing!' +
           LineEnding + 'Please check your installation and/or Path-Settings!' +
           LineEnding + 'Path: ' + PC_ParentalFiles.paths[i].path));
       end;
     end;
 
+    tempStr := 'Images';
+    PC_Images := TPathCollection.CreateByINISec(
+      'GFFLauncher/settings/paths.ini', 'Images');
+
     tempStr := 'CommonPaths';
-    PC_CommonPaths := TPathCollection.CreateByINISec('GFFLauncher/settings/paths.ini','CommonPaths');
+    PC_CommonPaths := TPathCollection.CreateByINISec(
+      'GFFLauncher/settings/paths.ini', 'CommonPaths');
 
     tempStr := 'Settings';
-    PC_Settings:=TPathCollection.CreateByINISec('GFFLauncher/settings/paths.ini','Settings');
+    PC_Settings := TPathCollection.CreateByINISec(
+      'GFFLauncher/settings/paths.ini', 'Settings');
 
     tempStr := 'Websettings';
-    WebSettings := TWebSettings.Create(PC_Settings.paths[PC_Settings.IndexOfName['webSettings']].path);
-
-
-    tempStr := 'Forms';
-    Application.CreateForm(TForm_settings, Form_settings);
-    Application.CreateForm(TForm_login, Form_login);
-    Timer_hideForm.Enabled := True;
-    StartupCompleted := True;
+    WebSettings := TWebSettings.Create(
+      PC_Settings.paths[PC_Settings.IndexOfName['webSettings']].path);
   except
     on E: Exception do
     begin
-      Form_error.Handle(E, 'Fatal Startup Error ! Please check your installation!' +
-        LineEnding + 'Please contact the developer(s) if you think this shouldn' +
-        #39 + 't happen!' + LineEnding + 'Debug info: '+tempStr, True);
+      Form_error.Handle(E, 'Fatal Recreate/Startup Error ! Please check your installation!'
+        + LineEnding + 'Please contact the developer(s) if you think this shouldn' +
+        #39 + 't happen!' + LineEnding + 'Debug info: ' + tempStr, True);
     end;
   end;
-End;
 
-Procedure Tform_startup.Formclose(Sender: TObject; Var Closeaction: Tcloseaction);
-Begin
-  If Not (Pos('NoDEL', CloseOption) > 0) Then
-  Begin
-    DeleteDirectory(PC_ParentalDirs.paths[PC_ParentalDirs.IndexOfName['temp']].path, True);
-  End;
-End;
+end;
 
 Procedure TForm_startup.Timer_hideFormTimer(Sender: TObject);
 Begin

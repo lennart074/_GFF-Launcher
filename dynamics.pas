@@ -14,11 +14,14 @@ uses
 
 type
 
-  TDynamicsError = class(Exception);
-  TPathObjError = class(Exception);
-  TPathCollError = class(Exception);
+  EDynamicsError = class(Exception);
+  EPathObjError = class(Exception);
+  EPathCollError = class(Exception);
 
-  //################################################################################################
+  EDynamicsObjError = class(Exception);
+  EDynamicsListError = class(Exception);
+
+//################################################################################################
 
   TPathString = String;
   TListOfPaths = TStringList;
@@ -29,10 +32,10 @@ type
   public
     constructor Create(PathInfo: TPathString);
     constructor CreateByINIVal(Inifile, Section, key: String;
-  default: String = 'INVALID');
+      default: String = 'INVALID');
       overload;
     constructor CreateByINIVal(Inifile: Tinifile; Section, key: String;
-  default: String = 'INVALID');
+      default: String = 'INVALID');
   private
     pName: String;
     pPath: String;
@@ -63,14 +66,16 @@ type
   private
     pPaths: TPathList;
     function GetCount: Integer;
-    function GetPaths(Index: Integer): TPathObject;
-    function SearchName(Str : String): Integer;
-    function SearchVal(Str : String): Integer;
+    function GetPaths(Index: Integer): TPathObject; overload;
+    function GetPaths(Str: String): TPathObject; overload;
+    function SearchName(Str: String): Integer;
+    function SearchVal(Str: String): Integer;
   public
     property paths[Index: Integer]: TPathObject read GetPaths;
-    property Count : Integer read GetCount;
-    property IndexOfName[Str : String] : Integer read SearchName;
-    property IndexOfValue[Str : String] : Integer read SearchVal;
+    property pathsBN[Str: String]: TPathObject read GetPaths;
+    property Count: Integer read GetCount;
+    property IndexOfName[Str: String]: Integer read SearchName;
+    property IndexOfValue[Str: String]: Integer read SearchVal;
   end;
 
 implementation
@@ -93,19 +98,20 @@ constructor TPathCollection.CreateByINISec(iniFile: TINIFile; Section: String);
 var
   tempKeys, tempVals: TStringList;
   INI: TIniFile;
-  tempStr : String;
-  I:Integer;
+  tempStr: String;
+  I: Integer;
 begin
   { DONE 75 -oL4YG -cBug_OfUnit : Comments withing read Section will break the creation! (arent't ignored!) }
   tempKeys := TStringList.Create;
   tempVals := TStringList.Create;
   iniFile.ReadSection(Section, tempKeys);
-  for i:=0 to tempKeys.Count-1 do
+  for i := 0 to tempKeys.Count - 1 do
   begin
-       tempStr := iniFile.ReadString(Section,tempKeys[i],';*INVALID*');
-       if not (Pos(';',tempStr)=1) then begin
-         tempVals.Add(tempStr);
-       end;
+    tempStr := iniFile.ReadString(Section, tempKeys[i], ';*INVALID*');
+    if not (Pos(';', tempStr) = 1) then
+    begin
+      tempVals.Add(tempStr);
+    end;
   end;
   Create(tempVals);
   FreeAndNil(tempVals);
@@ -116,20 +122,21 @@ constructor TPathCollection.CreateByINISec(iniFile, Section: String);
 var
   tempKeys, tempVals: TStringList;
   INI: TIniFile;
-  tempStr : String;
-  I:Integer;
+  tempStr: String;
+  I: Integer;
 begin
   { DONE 75 -oL4YG -cBug_OfUnit : Comments withing read Section will break the creation! (arent't ignored!) }
   tempKeys := TStringList.Create;
   tempVals := TStringList.Create;
   INI := TIniFile.Create(iniFile);
   INI.ReadSection(Section, tempKeys);
-  for i:=0 to tempKeys.Count-1 do
+  for i := 0 to tempKeys.Count - 1 do
   begin
-       tempStr := INI.ReadString(Section,tempKeys[i],';*INVALID*');
-       if not (Pos(';',tempStr)=1) then begin
-         tempVals.Add(tempStr);
-       end;
+    tempStr := INI.ReadString(Section, tempKeys[i], ';*INVALID*');
+    if not (Pos(';', tempStr) = 1) then
+    begin
+      tempVals.Add(tempStr);
+    end;
   end;
   Create(tempVals);
   FreeAndNil(INI);
@@ -142,35 +149,44 @@ begin
   Result := pPaths.objects[Index];
 end;
 
+function TPathCollection.GetPaths(Str: String): TPathObject;
+begin
+  Result := pPaths.objects[IndexOfName[Str]];
+end;
+
 function TPathCollection.GetCount: Integer;
 begin
-    Result:=pPaths.Count;
+  Result := pPaths.Count;
 end;
 
-function TPathCollection.SearchName(Str : String): Integer;
+function TPathCollection.SearchName(Str: String): Integer;
 var
-  I:Integer;
+  I: Integer;
 begin
-    for I:=0 to pPaths.Count-1 do begin
-      if (UpperCase(pPaths.objects[i].pName)=UpperCase(Str)) then begin
-        Result:=I;
-        Exit;
-      end;
-    end;
-    Result:=(-1);
-end;
-
-function TPathCollection.SearchVal(Str : String): Integer;
-var
-  I:Integer;
-begin
-  for I:=0 to pPaths.Count-1 do begin
-    if (pPaths.objects[i].pPath=Str) then begin
-      Result:=I;
+  for I := 0 to pPaths.Count - 1 do
+  begin
+    if (UpperCase(pPaths.objects[i].pName) = UpperCase(Str)) then
+    begin
+      Result := I;
       Exit;
     end;
   end;
-  Result:=(-1);
+  Result := (-1);
+end;
+
+function TPathCollection.SearchVal(Str: String): Integer;
+var
+  I: Integer;
+begin
+  for I := 0 to pPaths.Count - 1 do
+  begin
+    if (pPaths.objects[i].pPath = Str) then
+    begin
+      Result := I;
+      Exit;
+    end;
+  end;
+  Result := (-1);
 end;
 
 { TPathObject }
@@ -185,8 +201,8 @@ begin
 
   if (SplitList.Count < 3) then
   begin
-    raise (TPathObjError.Create('Cannot create Path without valid pathString!'+LineEnding+
-    'Str: "'+Pathinfo+'"'));
+    raise (EPathObjError.Create('Cannot create Path without valid pathString!' +
+      LineEnding + 'Str: "' + Pathinfo + '"'));
   end
   else
   begin

@@ -5,9 +5,25 @@ Program project_gfflauncher;
 Uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   cthreads, {$ENDIF} {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, bgrabitmappack, startup, gfflauncher, settings, launcher, login,
-  authsystem, errorhandler, objcollection, setupMC, Profiles, jsonWork,
-  consoles, Log, jsonUtils, StartThread, profiles_beta, Dynamics;
+  Forms,
+  bgrabitmappack,
+  startup,
+  gfflauncher,
+  settings,
+  launcher,
+  login,
+  authsystem,
+  errorhandler,
+  objcollection,
+  setupMC,
+  Profiles,
+  jsonWork,
+  consoles,
+  Log,
+  jsonUtils,
+  StartThread,
+  profiles_beta,
+  Dynamics;
 
 {$R *.res}
 
