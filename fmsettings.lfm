@@ -1,0 +1,92 @@
+object fm_Settings: Tfm_Settings
+  Left = 2000
+  Height = 300
+  Top = 180
+  Width = 450
+  BorderStyle = bsSingle
+  Caption = 'fm_Settings'
+  ClientHeight = 300
+  ClientWidth = 450
+  OnShow = FormShow
+  Position = poDefaultPosOnly
+  LCLVersion = '1.2.6.0'
+  object Button_browseJava: TButton
+    Left = 368
+    Height = 22
+    Top = 23
+    Width = 75
+    Caption = 'Browse'
+    OnClick = Button_browseJavaClick
+    TabOrder = 0
+  end
+  object LabeledEdit_java: TLabeledEdit
+    Left = 8
+    Height = 21
+    Top = 24
+    Width = 360
+    EditLabel.AnchorSideLeft.Control = LabeledEdit_java
+    EditLabel.AnchorSideRight.Control = LabeledEdit_java
+    EditLabel.AnchorSideRight.Side = asrBottom
+    EditLabel.AnchorSideBottom.Control = LabeledEdit_java
+    EditLabel.Left = 8
+    EditLabel.Height = 13
+    EditLabel.Top = 8
+    EditLabel.Width = 360
+    EditLabel.Caption = 'Java - Path'
+    EditLabel.ParentColor = False
+    ReadOnly = True
+    TabOrder = 1
+    Text = 'LabeledEdit_java'
+  end
+  object Button_reset: TButton
+    Left = 8
+    Height = 25
+    Top = 272
+    Width = 96
+    Caption = 'Reset to default'
+    OnClick = Button_resetClick
+    TabOrder = 2
+  end
+  object SpinEdit_loglevel: TSpinEdit
+    Left = 8
+    Height = 21
+    Top = 80
+    Width = 66
+    MaxValue = 1
+    MinValue = -1
+    TabOrder = 3
+  end
+  object Label_loglevel: TLabel
+    Left = 8
+    Height = 13
+    Top = 64
+    Width = 354
+    Caption = 'LogLevel (-1 = No Messages | 0 = All Messages | >0 = Less Messages)'
+    ParentColor = False
+  end
+  object Button_ok: TButton
+    Left = 368
+    Height = 25
+    Top = 272
+    Width = 75
+    Caption = 'OK'
+    OnClick = Button_okClick
+    TabOrder = 4
+  end
+  object Button_cancel: TButton
+    Left = 287
+    Height = 25
+    Top = 272
+    Width = 75
+    Caption = 'Cancel'
+    OnClick = Button_cancelClick
+    TabOrder = 5
+  end
+  object OpenDialog_java: TOpenDialog
+    Title = 'Please select you Java-Executable'
+    DefaultExt = '.exe'
+    Options = [ofPathMustExist, ofFileMustExist, ofNoNetworkButton, ofEnableSizing, ofViewDetail]
+    left = 344
+    top = 112
+  end
+end

@@ -1,0 +1,35 @@
+object fm_Log: Tfm_Log
+  Left = 1537
+  Height = 340
+  Top = 75
+  Width = 500
+  BorderStyle = bsSingle
+  Caption = 'fm_Log'
+  ClientHeight = 340
+  ClientWidth = 500
+  OnCreate = FormCreate
+  Position = poDefaultPosOnly
+  LCLVersion = '1.2.6.0'
+  object Memo_Log: TMemo
+    Left = 0
+    Height = 340
+    Top = 0
+    Width = 500
+    Color = 9581592
+    Font.Color = clAqua
+    Lines.Strings = (
+      'Memo_Log'
+    )
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+  end
+  object Timer_refreshLog: TTimer
+    Enabled = False
+    Interval = 200
+    OnTimer = Timer_refreshLogTimer
+    left = 400
+    top = 8
+  end
+end

@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="56">
+      <Unit0>
+        <Filename Value="galaxy_launcher.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="galaxy_launcher"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="18"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="fmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Main"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmMain"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="30"/>
+        <CursorPos X="10" Y="59"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="fmlogin.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Login"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmLogin"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="30"/>
+        <CursorPos X="6" Y="58"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="fmlauncher.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Launcher"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmLauncher"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="213"/>
+        <CursorPos X="9" Y="239"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="fmprofiles.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Profiles"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmProfiles"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="146"/>
+        <CursorPos X="55" Y="166"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="fmsettings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Settings"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmSettings"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="43"/>
+        <CursorPos X="29" Y="69"/>
+        <UsageCount Value="171"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="fmerror.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Error"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmError"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="170"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="launcher.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="launcher"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="88" Y="27"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="informations.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="informations"/>
+        <EditorIndex Value="21"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="15" Y="26"/>
+        <UsageCount Value="171"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="obj_settings.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_settings"/>
+        <EditorIndex Value="15"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="52"/>
+        <CursorPos X="32" Y="75"/>
+        <UsageCount Value="161"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="obj_paths.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_paths"/>
+        <EditorIndex Value="16"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="23"/>
+        <CursorPos X="55" Y="46"/>
+        <UsageCount Value="161"/>
+        <Loaded Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="fmlog.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="fm_Log"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="fmLog"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="86"/>
+        <CursorPos X="12" Y="51"/>
+        <UsageCount Value="158"/>
+        <Loaded Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="mojang.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="mojang"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="143"/>
+        <CursorPos X="38" Y="164"/>
+        <UsageCount Value="150"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="obj_user.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_user"/>
+        <EditorIndex Value="14"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="24" Y="27"/>
+        <UsageCount Value="150"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="transparency.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Transparency"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="32"/>
+        <UsageCount Value="121"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="downloads.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="downloads"/>
+        <EditorIndex Value="20"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="246"/>
+        <CursorPos X="1" Y="272"/>
+        <UsageCount Value="118"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="json.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="json"/>
+        <EditorIndex Value="19"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="19" Y="25"/>
+        <UsageCount Value="117"/>
+        <Loaded Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="obj_versions.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_versions"/>
+        <EditorIndex Value="18"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="15" Y="29"/>
+        <UsageCount Value="117"/>
+        <Loaded Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="minecraft_setup.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Minecraft_Setup"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="402"/>
+        <CursorPos X="5" Y="418"/>
+        <UsageCount Value="113"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="obj_profiles.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_profiles"/>
+        <EditorIndex Value="12"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="29"/>
+        <CursorPos X="60" Y="56"/>
+        <UsageCount Value="113"/>
+        <Loaded Value="True"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="obj_remprofiles.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_remProfiles"/>
+        <EditorIndex Value="13"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4"/>
+        <CursorPos X="40" Y="18"/>
+        <UsageCount Value="79"/>
+        <Loaded Value="True"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="newdownloads.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="newDownloads"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="91"/>
+        <CursorPos X="24" Y="91"/>
+        <UsageCount Value="68"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="installprofile.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="installProfile"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="12"/>
+        <UsageCount Value="64"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="remprofiles.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="remProfiles"/>
+        <EditorIndex Value="11"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="25"/>
+        <CursorPos X="24" Y="42"/>
+        <UsageCount Value="63"/>
+        <Loaded Value="True"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="obj_download.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="obj_download"/>
+        <EditorIndex Value="17"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="121"/>
+        <CursorPos X="4" Y="161"/>
+        <UsageCount Value="53"/>
+        <Loaded Value="True"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="C:\lazarus\components\todolist\todolist.pas"/>
+        <ComponentName Value="IDETodoWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="TodoList"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="331"/>
+        <CursorPos X="3" Y="334"/>
+        <UsageCount Value="6"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1681"/>
+        <CursorPos X="3" Y="1707"/>
+        <UsageCount Value="10"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="733"/>
+        <CursorPos X="3" Y="686"/>
+        <UsageCount Value="7"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="32"/>
+        <CursorPos X="3" Y="58"/>
+        <UsageCount Value="13"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
+        <UnitName Value="ExtCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="839"/>
+        <CursorPos X="3" Y="861"/>
+        <UsageCount Value="7"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="appUtils.pas"/>
+        <UnitName Value="appUtils"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4"/>
+        <CursorPos X="61" Y="1"/>
+        <UsageCount Value="56"/>
+        <Loaded Value="True"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\classes\classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="928"/>
+        <CursorPos X="3" Y="954"/>
+        <UsageCount Value="5"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\tthread.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="76"/>
+        <CursorPos X="3" Y="100"/>
+        <UsageCount Value="2"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysutilh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="265"/>
+        <CursorPos X="15" Y="290"/>
+        <UsageCount Value="4"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysutils.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="537"/>
+        <CursorPos X="3" Y="546"/>
+        <UsageCount Value="2"/>
+      </Unit34>
+      <Unit35>
+        <Filename Value="..\..\_Lazarus-APIs\synapse40\source\lib\httpsend.pas"/>
+        <UnitName Value="httpsend"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="79"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="7"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-json\src\fpjson.pp"/>
+        <UnitName Value="fpjson"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="395"/>
+        <CursorPos X="3" Y="383"/>
+        <UsageCount Value="7"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\fcl-base\src\contnrs.pp"/>
+        <UnitName Value="contnrs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="4"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="C:\lazarus\components\lazutils\fileutil.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="594"/>
+        <CursorPos X="1" Y="618"/>
+        <UsageCount Value="6"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\wstringh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="10" Y="19"/>
+        <UsageCount Value="6"/>
+      </Unit39>
+      <Unit40>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\wstrings.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="858"/>
+        <CursorPos X="3" Y="863"/>
+        <UsageCount Value="6"/>
+      </Unit40>
+      <Unit41>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="142"/>
+        <CursorPos X="3" Y="168"/>
+        <UsageCount Value="7"/>
+      </Unit41>
+      <Unit42>
+        <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
+        <UnitName Value="ComCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1712"/>
+        <CursorPos X="3" Y="1737"/>
+        <UsageCount Value="7"/>
+      </Unit42>
+      <Unit43>
+        <Filename Value="..\..\_Lazarus-APIs\synapse40\source\lib\blcksock.pas"/>
+        <UnitName Value="blcksock"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1059"/>
+        <CursorPos X="3" Y="941"/>
+        <UsageCount Value="7"/>
+      </Unit43>
+      <Unit44>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\packages\paszlib\src\zipper.pp"/>
+        <UnitName Value="zipper"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="68"/>
+        <CursorPos X="6" Y="81"/>
+        <UsageCount Value="7"/>
+      </Unit44>
+      <Unit45>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\sysstrh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="193"/>
+        <CursorPos X="10" Y="218"/>
+        <UsageCount Value="8"/>
+      </Unit45>
+      <Unit46>
+        <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="482"/>
+        <CursorPos X="11" Y="509"/>
+        <UsageCount Value="8"/>
+      </Unit46>
+      <Unit47>
+        <Filename Value="C:\lazarus\lcl\include\messagedialogs.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="203"/>
+        <CursorPos X="3" Y="205"/>
+        <UsageCount Value="8"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="C:\lazarus\lcl\include\lclintfh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="69"/>
+        <CursorPos X="10" Y="94"/>
+        <UsageCount Value="8"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="C:\lazarus\lcl\include\lclintf.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="368"/>
+        <CursorPos X="3" Y="371"/>
+        <UsageCount Value="8"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="C:\lazarus\lcl\interfacebase.pp"/>
+        <UnitName Value="InterfaceBase"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="214"/>
+        <CursorPos X="3" Y="233"/>
+        <UsageCount Value="8"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\objpas\sysutils\osutilsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="11" Y="28"/>
+        <UsageCount Value="8"/>
+      </Unit51>
+      <Unit52>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\sysutils.pp"/>
+        <UnitName Value="sysutils"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1051"/>
+        <CursorPos X="3" Y="1054"/>
+        <UsageCount Value="8"/>
+      </Unit52>
+      <Unit53>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\win\wininc\func.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="138"/>
+        <CursorPos X="12" Y="163"/>
+        <UsageCount Value="8"/>
+      </Unit53>
+      <Unit54>
+        <Filename Value="C:\lazarus\lcl\graphtype.pp"/>
+        <UnitName Value="GraphType"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="8"/>
+        <CursorPos X="3" Y="33"/>
+        <UsageCount Value="10"/>
+      </Unit54>
+      <Unit55>
+        <Filename Value="C:\lazarus\fpc\2.6.4\source\rtl\inc\objpash.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="167"/>
+        <CursorPos X="23" Y="192"/>
+        <UsageCount Value="10"/>
+      </Unit55>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="30" HistoryIndex="29">
+      <Position1>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="483" Column="37" TopLine="475"/>
+      </Position1>
+      <Position2>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="484" Column="37" TopLine="476"/>
+      </Position2>
+      <Position3>
+        <Filename Value="remprofiles.pp"/>
+        <Caret Line="263" Column="41" TopLine="223"/>
+      </Position3>
+      <Position4>
+        <Filename Value="galaxy_launcher.lpr"/>
+        <Caret Line="18" Column="1" TopLine="1"/>
+      </Position4>
+      <Position5>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="484" Column="37" TopLine="476"/>
+      </Position5>
+      <Position6>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="485" Column="37" TopLine="477"/>
+      </Position6>
+      <Position7>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="484" Column="37" TopLine="476"/>
+      </Position7>
+      <Position8>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="570" Column="16" TopLine="179"/>
+      </Position8>
+      <Position9>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="21" Column="69" TopLine="1"/>
+      </Position9>
+      <Position10>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="502" Column="26" TopLine="208"/>
+      </Position10>
+      <Position11>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="21" Column="69" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="431" Column="19" TopLine="388"/>
+      </Position12>
+      <Position13>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="372" Column="35" TopLine="348"/>
+      </Position13>
+      <Position14>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="368" Column="46" TopLine="348"/>
+      </Position14>
+      <Position15>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="361" Column="70" TopLine="348"/>
+      </Position15>
+      <Position16>
+        <Filename Value="minecraft_setup.pp"/>
+        <Caret Line="357" Column="70" TopLine="348"/>
+      </Position16>
+      <Position17>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="505" Column="5" TopLine="482"/>
+      </Position17>
+      <Position18>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="355" Column="25" TopLine="349"/>
+      </Position18>
+      <Position19>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="364" Column="25" TopLine="358"/>
+      </Position19>
+      <Position20>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="284" Column="5" TopLine="281"/>
+      </Position20>
+      <Position21>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="285" Column="5" TopLine="282"/>
+      </Position21>
+      <Position22>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="286" Column="5" TopLine="283"/>
+      </Position22>
+      <Position23>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="287" Column="5" TopLine="284"/>
+      </Position23>
+      <Position24>
+        <Filename Value="fmprofiles.pas"/>
+        <Caret Line="288" Column="5" TopLine="285"/>
+      </Position24>
+      <Position25>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="201" Column="1" TopLine="184"/>
+      </Position25>
+      <Position26>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="239" Column="7" TopLine="208"/>
+      </Position26>
+      <Position27>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="170" Column="1" TopLine="166"/>
+      </Position27>
+      <Position28>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="231" Column="9" TopLine="220"/>
+      </Position28>
+      <Position29>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="233" Column="66" TopLine="198"/>
+      </Position29>
+      <Position30>
+        <Filename Value="fmlauncher.pas"/>
+        <Caret Line="242" Column="9" TopLine="213"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>

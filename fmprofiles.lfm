@@ -1,0 +1,439 @@
+object fm_Profiles: Tfm_Profiles
+  Left = 2461
+  Height = 292
+  Top = 143
+  Width = 500
+  BorderIcons = []
+  BorderStyle = bsDialog
+  Caption = 'fm_Profiles'
+  ClientHeight = 292
+  ClientWidth = 500
+  OnClose = FormClose
+  OnShow = FormShow
+  Position = poDefaultPosOnly
+  LCLVersion = '1.2.6.0'
+  object PageControl_main: TPageControl
+    Left = -1
+    Height = 284
+    Top = -28
+    Width = 500
+    ActivePage = TabSheet_editProfile
+    TabIndex = 3
+    TabOrder = 0
+    object TabSheet_crMC_Forge: TTabSheet
+      Caption = 'TabSheet_crMC_Forge'
+      ClientHeight = 258
+      ClientWidth = 492
+      object Image_background_crMC_Forge: TImage
+        Left = -4
+        Height = 264
+        Top = 0
+        Width = 500
+        Stretch = True
+      end
+      object GroupBox_createMC_Forge: TGroupBox
+        Left = 0
+        Height = 209
+        Top = 8
+        Width = 489
+        Caption = 'Create a new Vanilla Profile'
+        ClientHeight = 191
+        ClientWidth = 485
+        TabOrder = 0
+        object GroupBox_relChannel: TGroupBox
+          Left = 0
+          Height = 192
+          Top = 0
+          Width = 152
+          Caption = 'Release-Channel + Version'
+          ClientHeight = 174
+          ClientWidth = 148
+          TabOrder = 0
+          object RadioButton_release: TRadioButton
+            Left = 0
+            Height = 17
+            Top = 0
+            Width = 123
+            Caption = 'RadioButton_release'
+            OnChange = RadioButton_releaseChange
+            TabOrder = 0
+          end
+          object RadioButton_snapshot: TRadioButton
+            Left = 0
+            Height = 17
+            Top = 24
+            Width = 133
+            Caption = 'RadioButton_snapshot'
+            OnChange = RadioButton_snapshotChange
+            TabOrder = 1
+          end
+          object RadioButton_beta: TRadioButton
+            Left = 0
+            Height = 17
+            Top = 48
+            Width = 110
+            Caption = 'RadioButton_beta'
+            OnChange = RadioButton_betaChange
+            TabOrder = 2
+          end
+          object RadioButton_alpha: TRadioButton
+            Left = 0
+            Height = 17
+            Top = 72
+            Width = 115
+            Caption = 'RadioButton_alpha'
+            OnChange = RadioButton_alphaChange
+            TabOrder = 3
+          end
+          object ComboBox_selVersion: TComboBox
+            Left = 0
+            Height = 21
+            Top = 120
+            Width = 144
+            ItemHeight = 13
+            OnChange = ComboBox_selVersionChange
+            Style = csDropDownList
+            TabOrder = 4
+          end
+        end
+        object GroupBox_options: TGroupBox
+          Left = 152
+          Height = 136
+          Top = 0
+          Width = 330
+          Caption = 'Options'
+          ClientHeight = 118
+          ClientWidth = 326
+          TabOrder = 1
+          object CheckBox_fReady: TCheckBox
+            Left = 8
+            Height = 17
+            Top = 48
+            Width = 121
+            Caption = 'Forge-Ready (BETA)'
+            TabOrder = 0
+          end
+          object LabeledEdit_profilename: TLabeledEdit
+            Left = 8
+            Height = 21
+            Top = 20
+            Width = 184
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_profilename
+            EditLabel.AnchorSideRight.Control = LabeledEdit_profilename
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_profilename
+            EditLabel.Left = 8
+            EditLabel.Height = 13
+            EditLabel.Top = 4
+            EditLabel.Width = 184
+            EditLabel.Caption = 'Profilename:'
+            EditLabel.ParentColor = False
+            TabOrder = 1
+          end
+          object LabeledEdit_javaArgs: TLabeledEdit
+            Left = 8
+            Height = 21
+            Top = 88
+            Width = 312
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_javaArgs
+            EditLabel.AnchorSideRight.Control = LabeledEdit_javaArgs
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_javaArgs
+            EditLabel.Left = 8
+            EditLabel.Height = 13
+            EditLabel.Top = 72
+            EditLabel.Width = 312
+            EditLabel.Caption = 'Java-Arguments'
+            EditLabel.ParentColor = False
+            TabOrder = 2
+          end
+          object CheckBox_isFav: TCheckBox
+            Left = 200
+            Height = 17
+            Top = 24
+            Width = 109
+            Caption = 'Add to Favourites'
+            TabOrder = 3
+          end
+        end
+        object Button_ok: TButton
+          Left = 408
+          Height = 25
+          Top = 167
+          Width = 75
+          Caption = 'OK (Create)'
+          OnClick = Button_okClick
+          TabOrder = 2
+        end
+        object Button_cancel: TButton
+          Left = 328
+          Height = 25
+          Top = 167
+          Width = 75
+          Caption = 'Cancel'
+          OnClick = Button_cancelClick
+          TabOrder = 3
+        end
+      end
+    end
+    object TabSheet_crPredef: TTabSheet
+      Caption = 'TabSheet_crPredef'
+      ClientHeight = 258
+      ClientWidth = 492
+      object GroupBox_crPredef: TGroupBox
+        Left = -3
+        Height = 257
+        Top = 6
+        Width = 497
+        Caption = 'Create Predefined'
+        ClientHeight = 239
+        ClientWidth = 493
+        TabOrder = 0
+        object GroupBox_profiles: TGroupBox
+          Left = 8
+          Height = 208
+          Top = 0
+          Width = 136
+          Caption = 'Avaliable Profiles'
+          ClientHeight = 190
+          ClientWidth = 132
+          TabOrder = 0
+          object ListBox_profiles: TListBox
+            Left = 0
+            Height = 194
+            Top = -4
+            Width = 132
+            ItemHeight = 0
+            OnSelectionChange = ListBox_profilesSelectionChange
+            TabOrder = 0
+          end
+        end
+        object GroupBox_info: TGroupBox
+          Left = 144
+          Height = 208
+          Top = 0
+          Width = 352
+          Caption = 'Profile informations'
+          ClientHeight = 190
+          ClientWidth = 348
+          TabOrder = 1
+          object LabeledEdit_name: TLabeledEdit
+            Left = 8
+            Height = 21
+            Top = 16
+            Width = 160
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_name
+            EditLabel.AnchorSideRight.Control = LabeledEdit_name
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_name
+            EditLabel.Left = 8
+            EditLabel.Height = 13
+            EditLabel.Top = 0
+            EditLabel.Width = 160
+            EditLabel.Caption = 'Profilename:'
+            EditLabel.ParentColor = False
+            ReadOnly = True
+            TabOrder = 0
+          end
+          object LabeledEdit_branch: TLabeledEdit
+            Left = 168
+            Height = 21
+            Top = 16
+            Width = 176
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_branch
+            EditLabel.AnchorSideRight.Control = LabeledEdit_branch
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_branch
+            EditLabel.Left = 168
+            EditLabel.Height = 13
+            EditLabel.Top = 0
+            EditLabel.Width = 176
+            EditLabel.Caption = 'Branch'
+            EditLabel.ParentColor = False
+            ReadOnly = True
+            TabOrder = 1
+          end
+          object LabeledEdit_version: TLabeledEdit
+            Left = 8
+            Height = 21
+            Top = 56
+            Width = 160
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_version
+            EditLabel.AnchorSideRight.Control = LabeledEdit_version
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_version
+            EditLabel.Left = 8
+            EditLabel.Height = 13
+            EditLabel.Top = 40
+            EditLabel.Width = 160
+            EditLabel.Caption = 'Version:'
+            EditLabel.ParentColor = False
+            TabOrder = 2
+          end
+          object LabeledEdit_owner: TLabeledEdit
+            Left = 168
+            Height = 21
+            Top = 56
+            Width = 176
+            EditLabel.AnchorSideLeft.Control = LabeledEdit_owner
+            EditLabel.AnchorSideRight.Control = LabeledEdit_owner
+            EditLabel.AnchorSideRight.Side = asrBottom
+            EditLabel.AnchorSideBottom.Control = LabeledEdit_owner
+            EditLabel.Left = 168
+            EditLabel.Height = 13
+            EditLabel.Top = 40
+            EditLabel.Width = 176
+            EditLabel.Caption = 'Published by:'
+            EditLabel.ParentColor = False
+            TabOrder = 3
+          end
+          object Memo_descr: TMemo
+            Left = 8
+            Height = 90
+            Top = 96
+            Width = 260
+            Lines.Strings = (
+              'Memo_descr'
+            )
+            TabOrder = 4
+          end
+          object Label_Comment: TLabel
+            Left = 8
+            Height = 13
+            Top = 80
+            Width = 92
+            Caption = 'Short-Description:'
+            ParentColor = False
+          end
+          object Button_install: TButton
+            Left = 269
+            Height = 25
+            Top = 136
+            Width = 75
+            Caption = 'Install'
+            OnClick = Button_installClick
+            TabOrder = 5
+          end
+          object Button_cancelPred: TButton
+            Left = 269
+            Height = 25
+            Top = 161
+            Width = 75
+            Caption = 'Cancel/Close'
+            OnClick = Button_cancelPredClick
+            TabOrder = 6
+          end
+        end
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'TabSheet1'
+    end
+    object TabSheet_editProfile: TTabSheet
+      Caption = 'TabSheet_editProfile'
+      ClientHeight = 258
+      ClientWidth = 492
+      object LabeledEdit_pName: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 56
+        Width = 224
+        EditLabel.AnchorSideLeft.Control = LabeledEdit_pName
+        EditLabel.AnchorSideRight.Control = LabeledEdit_pName
+        EditLabel.AnchorSideRight.Side = asrBottom
+        EditLabel.AnchorSideBottom.Control = LabeledEdit_pName
+        EditLabel.Left = 8
+        EditLabel.Height = 13
+        EditLabel.Top = 40
+        EditLabel.Width = 224
+        EditLabel.Caption = 'Profilename'
+        EditLabel.ParentColor = False
+        TabOrder = 0
+        Text = '<ERROR>'
+      end
+      object CheckBox_enabled: TCheckBox
+        Left = 8
+        Height = 17
+        Top = 16
+        Width = 59
+        Caption = 'Enabled'
+        TabOrder = 1
+      end
+      object CheckBox_frdy: TCheckBox
+        Left = 240
+        Height = 17
+        Top = 16
+        Width = 84
+        BidiMode = bdRightToLeft
+        Caption = 'Forge-Ready'
+        Enabled = False
+        ParentBidiMode = False
+        TabOrder = 2
+      end
+      object LabeledEdit_ppath: TLabeledEdit
+        Left = 8
+        Height = 21
+        Top = 96
+        Width = 224
+        EditLabel.AnchorSideLeft.Control = LabeledEdit_ppath
+        EditLabel.AnchorSideRight.Control = LabeledEdit_ppath
+        EditLabel.AnchorSideRight.Side = asrBottom
+        EditLabel.AnchorSideBottom.Control = LabeledEdit_ppath
+        EditLabel.Left = 8
+        EditLabel.Height = 13
+        EditLabel.Top = 80
+        EditLabel.Width = 224
+        EditLabel.Caption = 'Profie-Path'
+        EditLabel.ParentColor = False
+        TabOrder = 3
+      end
+      object CheckBox_fupdateAllowed: TCheckBox
+        Left = 240
+        Height = 17
+        Top = 40
+        Width = 139
+        BidiMode = bdRightToLeft
+        Caption = '''Force-Update''-Allowed'
+        Enabled = False
+        ParentBidiMode = False
+        TabOrder = 4
+      end
+    end
+  end
+  object FProgBar_progress: TBGRAFlashProgressBar
+    Left = 2
+    Height = 33
+    Top = 256
+    Width = 496
+    MinValue = 0
+    MaxValue = 100
+    Value = 50
+    Color = 14852966
+  end
+  object ProgressBar_progress: TProgressBar
+    Left = 2
+    Height = 36
+    Top = 224
+    Width = 496
+    TabOrder = 1
+  end
+  object status: TLabeledEdit
+    Left = 2
+    Height = 21
+    Top = 239
+    Width = 496
+    EditLabel.AnchorSideLeft.Control = status
+    EditLabel.AnchorSideRight.Control = status
+    EditLabel.AnchorSideRight.Side = asrBottom
+    EditLabel.AnchorSideBottom.Control = status
+    EditLabel.Left = 2
+    EditLabel.Height = 13
+    EditLabel.Top = 223
+    EditLabel.Width = 496
+    EditLabel.Caption = 'Status:'
+    EditLabel.ParentColor = False
+    ReadOnly = True
+    TabOrder = 2
+    Text = 'not set'
+  end
+end
